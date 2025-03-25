@@ -1,0 +1,20 @@
+buildscript {
+    ext {
+        repos = {
+            mavenCentral()
+        }
+    }
+    repositories repos
+}
+
+
+plugins {
+    id "co.uzzu.dotenv.gradle" version "4.0.0"
+}
+
+configure(allprojects) {
+    repositories repos
+    buildscript {
+        repositories repos
+    }
+}
