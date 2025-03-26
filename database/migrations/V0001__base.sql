@@ -120,7 +120,6 @@ create table balances (
     credit_id int references credits(id),
     remaining_debt numeric(15, 2),
     accrued_by_percent numeric(15, 2),
-    penalties numeric(15, 2),
     created_at date
 );
 

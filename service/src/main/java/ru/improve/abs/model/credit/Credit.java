@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.improve.abs.model.Balance;
 import ru.improve.abs.model.CreditTariff;
 import ru.improve.abs.model.Payment;
 import ru.improve.abs.model.User;
@@ -66,5 +67,8 @@ public class Credit {
 
     @OneToMany(mappedBy = "credit")
     private List<Payment> payments;
+
+    @OneToMany(mappedBy = "credit")
+    private List<Balance> balances;
 }
 
