@@ -1,5 +1,5 @@
 server:
-  port: ${SERVICE_PORT}
+  port: ${INFO_SERVICE_POST}
 
 spring:
   application:

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static ru.improve.abs.api.exception.ErrorCode.ACCESS_DENIED;
 import static ru.improve.abs.api.exception.ErrorCode.ALREADY_EXIST;
 import static ru.improve.abs.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
 import static ru.improve.abs.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 import static ru.improve.abs.api.exception.ErrorCode.NOT_FOUND;
 import static ru.improve.abs.api.exception.ErrorCode.SESSION_IS_OVER;
 import static ru.improve.abs.api.exception.ErrorCode.UNAUTHORIZED;
-import static ru.improve.abs.api.exception.ErrorCode.ACCESS_DENIED;
 import static ru.improve.abs.util.message.MessageKeys.TITLE_ACCESS_DENIED;
 import static ru.improve.abs.util.message.MessageKeys.TITLE_ALREADY_EXIST;
 import static ru.improve.abs.util.message.MessageKeys.TITLE_ILLEGAL_DTO_VALUE;
@@ -97,6 +101,33 @@ public class ExceptionResolver {
     }
 
     private ErrorCodeMessagePair resolveDtoException(Exception ex) {
+        String message = getParametersWithErrorAndMessages(ex).stream()
+                .map(parameterMessages -> parameterMessages.parameter + " "
+                        + parameterMessages.messages.stream().collect(Collectors.joining(", ")))
+                .collect(Collectors.joining("; "));
+        return ErrorCodeMessagePair.of(
+                ILLEGAL_DTO_VALUE, resolveMessage(messageKeyMap.get(ILLEGAL_DTO_VALUE), message)
+        );
+    }
+
+    private List<ParameterMessages> getParametersWithErrorAndMessages(Exception ex) {
+        if (ex instanceof MethodArgumentNotValidException e) {
+            return e.getBindingResult().getFieldErrors().stream()
+                    .map(fieldError -> ParameterMessages.of(
+                            fieldError.getField(),
+                            List.of(fieldError.getDefaultMessage())
+                    ))
+                    .toList();
+        } else if (ex instanceof HandlerMethodValidationException e) {
+            return e.getAllValidationResults().stream()
+                    .map(parameterValidationResult -> ParameterMessages.of(
+                            parameterValidationResult.getMethodParameter().getParameterName(),
+                            parameterValidationResult.getResolvableErrors().stream()
+                                    .map(MessageSourceResolvable::getDefaultMessage)
+                                    .toList()
+                    ))
+                    .toList();
+        }
         return null;
     }
 
@@ -108,13 +139,19 @@ public class ExceptionResolver {
         );
     }
 
-    private String resolveMessage(String key, String[] params) {
+    private String resolveMessage(String key, String... params) {
         return messageSource.getMessage(key, params, key, LocaleContextHolder.getLocale());
     }
 
     private record ErrorCodeMessagePair(ErrorCode code, String message) {
         public static ErrorCodeMessagePair of(ErrorCode code, String message) {
             return new ErrorCodeMessagePair(code, message);
+        }
+    }
+
+    private record ParameterMessages(String parameter, List<String> messages) {
+        public static ParameterMessages of(String parameter, List<String> messages) {
+            return new ParameterMessages(parameter, messages);
         }
     }
 }

@@ -1,17 +1,24 @@
 server:
   port: ${GATEWAY_SERVICE_PORT}
   forward-headers-strategy: framework
+  error:
+    include-stacktrace: never
+    include-message: never
 
 spring:
+  application:
+    name: gateway-service
+  config:
+    import: optional:file:.env[.properties]
   cloud:
     gateway:
       routes:
         - id: auth-service
-          uri: ${AUTH_SERVICE_POST}
+          uri: ${AUTH_SERVICE_URI}
           predicates:
-            - name: authentication
-
+            - Path=/auth/**
+            -
         - id: information-service
-          uri: ${INFO_SERVICE_POST}
+          uri: ${INFO_SERVICE_URI}
           predicates:
-            - name: information
+            - Path=/info/**

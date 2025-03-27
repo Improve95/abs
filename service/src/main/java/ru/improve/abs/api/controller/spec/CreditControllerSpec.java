@@ -39,7 +39,9 @@ public interface CreditControllerSpec {
             @RequestParam(name = PAGE_SIZE) @Valid int pageSize);
 
     @SecurityRequirement(name = SWAGGER_SECURITY_SCHEME_NAME)
-    ResponseEntity<CreditRequestResponse> createCreditRequest(PostCreditRequestRequest postCreditRequestRequest);
+    ResponseEntity<CreditRequestResponse> createCreditRequest(
+            @RequestBody @Valid PostCreditRequestRequest postCreditRequestRequest
+    );
 
     @SecurityRequirement(name = SWAGGER_SECURITY_SCHEME_NAME)
     ResponseEntity<CreditResponse> createCredit(@RequestBody @Valid PostCreditRequest creditRequest);

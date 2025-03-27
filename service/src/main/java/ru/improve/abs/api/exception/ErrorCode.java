@@ -12,17 +12,17 @@ public enum ErrorCode {
 
     ALREADY_EXIST(2),
 
-    ILLEGAL_DTO_VALUE(7),
+    ILLEGAL_DTO_VALUE(3),
 
-    ILLEGAL_VALUE(3),
+    ILLEGAL_VALUE(4),
 
-    NOT_FOUND(4),
+    NOT_FOUND(5),
 
-    UNAUTHORIZED(5),
+    UNAUTHORIZED(6),
 
-    SESSION_IS_OVER(6),
+    SESSION_IS_OVER(7),
 
-    ACCESS_DENIED(7);
+    ACCESS_DENIED(8);
 
     private final int code;
 }
