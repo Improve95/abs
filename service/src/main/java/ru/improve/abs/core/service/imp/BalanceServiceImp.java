@@ -89,31 +89,17 @@ public class BalanceServiceImp implements BalanceService {
         }
 
         Balance lastBalance = findLastCreditBalance(credit);
+        LocalDate lastBalanceDate = lastBalance.getCreatedAt();
+        BigDecimal dailyPercentAmount = calculateDailyAccruedByPercentAmount(
+                lastBalance.getRemainingDebt(), credit.getPercent()
+        );
         Balance newBalance = Balance.builder()
                 .credit(credit)
+                .remainingDebt(lastBalance.getRemainingDebt())
+                .remainingMonthDebt(lastBalance.getRemainingMonthDebt())
+                .accruedByPercent(dailyPercentAmount)
+                .createdAt(lastBalanceDate.plusDays(1))
                 .build();
-        if (lastBalance != null) {
-            LocalDate lastBalanceDate = lastBalance.getCreatedAt();
-            BigDecimal dailyPercentAmount = calculateDailyAccruedByPercentAmount(
-                    lastBalance.getRemainingDebt(), credit.getPercent()
-            );
-            newBalance = newBalance.toBuilder()
-                    .remainingDebt(lastBalance.getRemainingDebt())
-                    .accruedByPercent(dailyPercentAmount)
-                    .penalties(newBalance.getPenalties())
-                    .createdAt(lastBalanceDate.plusDays(1))
-                    .build();
-        } else {
-            BigDecimal dailyPercentAmount = calculateDailyAccruedByPercentAmount(
-                    credit.getInitialAmount(), credit.getPercent()
-            );
-            newBalance = newBalance.toBuilder()
-                    .remainingDebt(credit.getInitialAmount())
-                    .accruedByPercent(dailyPercentAmount)
-                    .penalties(BigDecimal.valueOf(0))
-                    .createdAt(todayDate)
-                    .build();
-        }
         balanceRepository.save(newBalance);
     }
 

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.improve.abs.api.dto.balance.PostBalanceRequest;
 import ru.improve.abs.api.dto.credit.CreditRequestResponse;
 import ru.improve.abs.api.dto.credit.CreditResponse;
 import ru.improve.abs.api.dto.credit.CreditTariffResponse;
@@ -14,8 +15,8 @@ import ru.improve.abs.core.mapper.CreditMapper;
 import ru.improve.abs.core.repository.CreditRepository;
 import ru.improve.abs.core.repository.CreditRequestRepository;
 import ru.improve.abs.core.repository.CreditTariffRepository;
-import ru.improve.abs.core.service.CreditService;
 import ru.improve.abs.core.service.BalanceService;
+import ru.improve.abs.core.service.CreditService;
 import ru.improve.abs.core.service.UserService;
 import ru.improve.abs.model.CreditRequest;
 import ru.improve.abs.model.CreditTariff;
@@ -118,12 +119,28 @@ public class CreditServiceImp implements CreditService {
     @Transactional
     @Override
     public CreditResponse takeCreatedCredit(long creditId) {
-        Credit credit = findCreditById(creditId);
-        if (credit.getUser().getId() != userService.getUserFromAuthentication().getId()) {
+        Credit credit = creditRepository.findCreditByIdAndAndCreditStatus(creditId, CreditStatus.CREATE)
+                .orElseThrow(() -> new ServiceException(NOT_FOUND, "credit", "id and open status"));
+
+        User user = credit.getUser();
+        if (creditRepository.countCreditByUserAndCreditStatus(user, CreditStatus.OPEN) >= 1) {
+            throw new ServiceException(ACCESS_DENIED, "you already have credit");
+        }
+        if (user.getId() != userService.getUserFromAuthentication().getId()) {
             throw new ServiceException(ACCESS_DENIED, "credit");
         }
         credit.setTakingDate(LocalDate.now());
         credit.setCreditStatus(CreditStatus.OPEN);
+        balanceService.createBalance(PostBalanceRequest.builder()
+                .credit(credit)
+                .remainingDebt(credit.getInitialAmount())
+                .remainingMonthDebt(credit.getMonthAmount())
+                .accruedByPercent(balanceService.calculateDailyAccruedByPercentAmount(
+                        credit.getInitialAmount(),
+                        credit.getPercent()
+                ))
+                .build()
+        );
         return creditMapper.toCreditResponse(credit);
     }
 

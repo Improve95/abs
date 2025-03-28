@@ -22,7 +22,5 @@ public class BalanceResponse {
 
     private BigDecimal accruedByPercent;
 
-    private BigDecimal penalties;
-
     private LocalDate createdAt;
 }

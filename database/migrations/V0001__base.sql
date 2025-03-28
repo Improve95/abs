@@ -121,7 +121,6 @@ create table balances (
     remaining_debt numeric(15, 2),
     remaining_month_debt numeric(15, 2),
     accrued_by_percent numeric(15, 2),
-    unpaid_debt numeric(15, 2),
     created_at date
 );
 
@@ -139,3 +138,12 @@ create table payments (
     commission_amount decimal(15, 2),
     created_at timestamp
 );
+
+insert into users(email, password, name, employment)
+values ('email1@gmail.com', 'password1', 'name1', 'employment1');
+
+insert into sessions(id, user_id, issued_at, expired_at, is_enable)
+values ('1', '1', current_timestamp - interval '3 month', current_timestamp + interval '3 month', true);
+
+truncate table credits cascade;
+alter sequence credits_id_seq restart with 1;
