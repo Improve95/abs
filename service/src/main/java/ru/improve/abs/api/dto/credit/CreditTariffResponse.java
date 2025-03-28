@@ -17,7 +17,7 @@ public class CreditTariffResponse {
 
     private BigDecimal upToAmount;
 
-    private long upToCreditPeriod;
+    private long upToCreditDuration;
 
     private int creditPercent;
 }

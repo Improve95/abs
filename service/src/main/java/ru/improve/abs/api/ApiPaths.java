@@ -27,17 +27,25 @@ public class ApiPaths {
 
     public static final String CREDITS = "/credits";
 
+    public static final String TAKE = "/take";
+
     public static final String REQUEST = "/requests";
 
     public static final String TARIFFS = "/tariffs";
 
     public static final String PAYMENTS = "/payments";
 
+    public static final String BALANCES = "/balances";
+
     public static final String ADMIN = "/admin";
 
     public static final String ALL = "/all";
 
     public static final String ID = "/{id}";
+
+    public static final String PATH_CREDIT_ID = "/{creditId}";
+
+    public static final String PATH_USER_ID = "/{userId}";
 
     public static final String ROLE_ID = "role_id";
 

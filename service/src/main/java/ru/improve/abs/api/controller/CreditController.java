@@ -26,7 +26,9 @@ import static ru.improve.abs.api.ApiPaths.CREDITS;
 import static ru.improve.abs.api.ApiPaths.ID;
 import static ru.improve.abs.api.ApiPaths.PAGE_NUMBER;
 import static ru.improve.abs.api.ApiPaths.PAGE_SIZE;
+import static ru.improve.abs.api.ApiPaths.PATH_CREDIT_ID;
 import static ru.improve.abs.api.ApiPaths.REQUEST;
+import static ru.improve.abs.api.ApiPaths.TAKE;
 import static ru.improve.abs.api.ApiPaths.TARIFFS;
 import static ru.improve.abs.api.ApiPaths.USERS;
 
@@ -51,14 +53,12 @@ public class CreditController implements CreditControllerSpec {
         return ResponseEntity.ok(creditResponses);
     }
 
-    @Override
     @GetMapping(ID)
     public ResponseEntity<CreditResponse> getCreditById(@PathVariable @Valid @Positive long id) {
         CreditResponse creditResponse = creditService.getCreditById(id);
         return ResponseEntity.ok(creditResponse);
     }
 
-    @Override
     @GetMapping(USERS + ID)
     public ResponseEntity<List<CreditResponse>> getAllCreditsByUserId(
             @PathVariable @Valid @Positive int id,
@@ -76,10 +76,15 @@ public class CreditController implements CreditControllerSpec {
         return ResponseEntity.ok(creditRequestResponse);
     }
 
-    @Override
     @PostMapping
     public ResponseEntity<CreditResponse> createCredit(@RequestBody @Valid PostCreditRequest creditRequest) {
         CreditResponse creditResponse = creditService.createCredit(creditRequest);
+        return ResponseEntity.ok(creditResponse);
+    }
+
+    @PostMapping(TAKE + PATH_CREDIT_ID)
+    public ResponseEntity<CreditResponse> takeCreatedCredit(@PathVariable @Valid @Positive int creditId) {
+        CreditResponse creditResponse = creditService.takeCreatedCredit(creditId);
         return ResponseEntity.ok(creditResponse);
     }
 }

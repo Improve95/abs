@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import ru.improve.abs.model.credit.Credit;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 @Table(name = "balances")
 @Getter
 @Setter
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Balance {
@@ -36,8 +38,13 @@ public class Balance {
     @Column(name = "remaining_debt")
     private BigDecimal remainingDebt;
 
+    @Column(name = "remaining_month_debt")
+    private BigDecimal remainingMonthDebt;
+
     @Column(name = "accrued_by_percent")
     private BigDecimal accruedByPercent;
+
+    private BigDecimal penalties;
 
     @Column(name = "created_at")
     private LocalDate createdAt;

@@ -45,4 +45,7 @@ public interface CreditControllerSpec {
 
     @SecurityRequirement(name = SWAGGER_SECURITY_SCHEME_NAME)
     ResponseEntity<CreditResponse> createCredit(@RequestBody @Valid PostCreditRequest creditRequest);
+
+    @SecurityRequirement(name = SWAGGER_SECURITY_SCHEME_NAME)
+    ResponseEntity<CreditResponse> takeCreatedCredit(@PathVariable @Valid @Positive int creditId);
 }

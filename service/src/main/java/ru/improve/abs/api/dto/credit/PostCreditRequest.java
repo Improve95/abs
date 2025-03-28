@@ -22,10 +22,6 @@ public class PostCreditRequest {
 
     @NotNull
     @Positive
-    private BigDecimal monthAmount;
-
-    @NotNull
-    @Positive
     private int userId;
 
     @NotNull

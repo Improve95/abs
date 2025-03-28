@@ -15,14 +15,14 @@ import ru.improve.abs.core.repository.CreditRepository;
 import ru.improve.abs.core.repository.CreditRequestRepository;
 import ru.improve.abs.core.repository.CreditTariffRepository;
 import ru.improve.abs.core.service.CreditService;
+import ru.improve.abs.core.service.BalanceService;
 import ru.improve.abs.core.service.UserService;
-import ru.improve.abs.model.credit.Credit;
 import ru.improve.abs.model.CreditRequest;
 import ru.improve.abs.model.CreditTariff;
 import ru.improve.abs.model.User;
+import ru.improve.abs.model.credit.Credit;
 import ru.improve.abs.model.credit.CreditStatus;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -36,6 +36,8 @@ import static ru.improve.abs.util.message.MessageKeys.ILLEGAL_CREDIT_REQUEST_DTO
 public class CreditServiceImp implements CreditService {
 
     private final UserService userService;
+
+    private final BalanceService balanceService;
 
     private final CreditRequestRepository creditRequestRepository;
 
@@ -103,7 +105,9 @@ public class CreditServiceImp implements CreditService {
         CreditTariff creditTariff = findCreditTariffById(creditRequest.getTariffId());
 
         Credit credit = creditMapper.toCredit(creditRequest);
-//        credit.setMonthAmount();
+        credit.setMonthAmount(balanceService.calculateCreditMonthAmount(
+                creditRequest.getInitialAmount(), creditRequest.getPercent(), creditRequest.getCreditPeriod()
+        ));
         credit.setUser(user);
         credit.setCreditTariff(creditTariff);
         credit = creditRepository.save(credit);
@@ -135,20 +139,5 @@ public class CreditServiceImp implements CreditService {
     public Credit findCreditById(long creditId) {
         return creditRepository.findById(creditId)
                 .orElseThrow(() -> new ServiceException(NOT_FOUND, "credit", "id"));
-    }
-
-    private BigDecimal calculateCreditMonthAmount(BigDecimal amount, int percent, int duration) {
-        double doublePercent = percent / 100d;
-        double monthPart = Math.pow((1 + doublePercent), duration);
-        return amount.multiply(
-                BigDecimal.valueOf((doublePercent / 12) * monthPart / (monthPart - 1))
-        );
-    }
-
-    private BigDecimal calculateAccruedByPercentAmount(BigDecimal amount, int percent) {
-        double doublePercent = percent / 100d;
-        return amount.multiply(
-                BigDecimal.valueOf(doublePercent / (365 + (LocalDate.now().getYear() % 4 == 0 ? 1 : 0)))
-        );
     }
 }

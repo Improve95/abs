@@ -5,6 +5,5 @@ import ru.improve.abs.api.dto.payment.PostPaymentResponse;
 
 public interface PaymentService {
 
-
     PostPaymentResponse payForCredit(PostPaymentRequest postPaymentRequest);
 }
