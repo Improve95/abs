@@ -15,7 +15,7 @@ import static ru.improve.abs.api.ApiPaths.TAKE;
 @UtilityClass
 public class FillBaseEntityUtil {
 
-	private String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbDFAZ21haWwuY29tIiwic2Vzc2lvbklkIjoxLCJleHAiOjE3NDMyNTI2NTEsImlhdCI6MTc0MzE5NjI1MX0.8uCe8en4RCCpLhUnsvK4aZYZKIHVjJp40uomA0FDXK0";
+	private String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbDFAZ21haWwuY29tIiwic2Vzc2lvbklkIjoxLCJleHAiOjE3NTMyNTI2NTEsImlhdCI6MTc0MzE5NjI1MX0.uWfvtR3XupaPQuYGH4a8cZG1RWyCOaCqhMrTjMqK4iA";
 
     public void fillBaseEntity() {
 		Response response = given().baseUri("http://localhost:8072")

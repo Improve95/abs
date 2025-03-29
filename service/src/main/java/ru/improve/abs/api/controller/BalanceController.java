@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.improve.abs.api.controller.spec.BalanceControllerSpec;
-import ru.improve.abs.core.service.BalanceService;
+import ru.improve.abs.core.service.ProcessingBalanceService;
 
 import static ru.improve.abs.api.ApiPaths.BALANCES;
 
@@ -16,10 +16,10 @@ import static ru.improve.abs.api.ApiPaths.BALANCES;
 @RequestMapping(BALANCES)
 public class BalanceController implements BalanceControllerSpec {
 
-    private final BalanceService balanceService;
+    private final ProcessingBalanceService processingBalanceService;
 
     @PostMapping("/next_days/{number}")
     public void calcNextDays(@PathVariable(name = "number") @Positive int dayNumber) {
-        balanceService.calcCreditBalances(dayNumber);
+        processingBalanceService.calcCreditBalances(dayNumber);
     }
 }

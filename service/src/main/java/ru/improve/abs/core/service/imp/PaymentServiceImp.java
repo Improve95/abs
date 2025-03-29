@@ -7,9 +7,10 @@ import ru.improve.abs.api.dto.payment.PostPaymentRequest;
 import ru.improve.abs.api.dto.payment.PostPaymentResponse;
 import ru.improve.abs.core.mapper.BalanceMapper;
 import ru.improve.abs.core.repository.PaymentRepository;
+import ru.improve.abs.core.service.BalanceService;
 import ru.improve.abs.core.service.CreditService;
 import ru.improve.abs.core.service.PaymentService;
-import ru.improve.abs.core.service.BalanceService;
+import ru.improve.abs.core.service.PenaltyService;
 import ru.improve.abs.model.Payment;
 
 import java.time.Instant;
@@ -24,6 +25,8 @@ public class PaymentServiceImp implements PaymentService {
 
     private final BalanceMapper balanceMapper;
 
+    private final PenaltyService penaltyService;
+
     private final BalanceService balanceService;
 
     @Transactional
@@ -34,7 +37,9 @@ public class PaymentServiceImp implements PaymentService {
         payment.setCredit(creditService.findCreditById(postPaymentRequest.getCreditId()));
 
         payment = paymentRepository.save(payment);
-        balanceService.editBalanceAfterPayment(payment);
+
+        penaltyService.editPenaltyAfterPayment(payment.getAmount(), payment.getCredit());
+        balanceService.editBalanceAfterPayment(payment.getAmount(), payment.getCredit());
 
         return balanceMapper.toPostPaymentResponse(payment);
     }

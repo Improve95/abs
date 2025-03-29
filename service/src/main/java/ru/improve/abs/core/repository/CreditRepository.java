@@ -18,6 +18,8 @@ public interface CreditRepository extends
 
     Page<Credit> findAllByUser(User user, Pageable page);
 
+    Page<Credit> findAllByCreditStatus(CreditStatus creditStatus, Pageable page);
+
     Optional<Credit> findCreditByIdAndAndCreditStatus(long creditId, CreditStatus creditStatus);
 
     int countCreditByUserAndCreditStatus(User user, CreditStatus status);
