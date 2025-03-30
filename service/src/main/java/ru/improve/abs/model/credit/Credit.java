@@ -20,6 +20,7 @@ import ru.improve.abs.model.Balance;
 import ru.improve.abs.model.CreditTariff;
 import ru.improve.abs.model.Payment;
 import ru.improve.abs.model.User;
+import ru.improve.abs.model.penalty.Penalty;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -70,5 +71,8 @@ public class Credit {
 
     @OneToMany(mappedBy = "credit")
     private List<Balance> balances;
+
+    @OneToMany(mappedBy = "credit")
+    private List<Penalty> penalties;
 }
 

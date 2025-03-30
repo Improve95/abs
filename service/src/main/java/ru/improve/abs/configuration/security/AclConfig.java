@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.acls.domain.AclAuthorizationStrategyImpl;
 import org.springframework.security.acls.domain.ConsoleAuditLogger;
 import org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy;
@@ -22,6 +23,18 @@ import static ru.improve.abs.core.security.SecurityUtil.ADMIN_ROLE;
 public class AclConfig {
 
     private final CacheConfig cacheConfig;
+
+    private final AclDataSourceConfig aclDataSourceConfig;
+
+    @Bean
+    public DataSource aclDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl(aclDataSourceConfig.getUrl());
+        dataSource.setUsername(aclDataSourceConfig.getUsername());
+        dataSource.setPassword(aclDataSourceConfig.getPassword());
+        dataSource.setDriverClassName(aclDataSourceConfig.getDriverClassName());
+        return dataSource;
+    }
 
     @Bean
     public ConsoleAuditLogger auditLogger() {

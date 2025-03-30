@@ -7,12 +7,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.improve.abs.model.credit.Credit;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,14 +33,20 @@ public class Penalty {
     @Id
     private long id;
 
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id")
+    private Credit credit;
+
     @Enumerated(value = EnumType.STRING)
     private PenaltyType type;
 
     private BigDecimal amount;
 
+    @Builder.Default
     @Enumerated(value = EnumType.STRING)
-    private PenaltyStatus status;
+    private PenaltyStatus status = PenaltyStatus.NOT_PAID;
 
+    @Builder.Default
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDate createdAt = LocalDate.now();
 }

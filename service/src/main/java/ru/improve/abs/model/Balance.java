@@ -44,8 +44,6 @@ public class Balance {
     @Column(name = "accrued_by_percent")
     private BigDecimal accruedByPercent;
 
-    private BigDecimal penalties;
-
     @Column(name = "created_at")
     private LocalDate createdAt;
 }

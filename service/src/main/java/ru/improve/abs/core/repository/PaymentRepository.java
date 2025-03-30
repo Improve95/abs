@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import ru.improve.abs.model.Payment;
+import ru.improve.abs.model.credit.Credit;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -14,8 +15,12 @@ public interface PaymentRepository extends
         PagingAndSortingRepository<Payment, Long>,
         JpaRepository<Payment, Long> {
 
-    List<Payment> findAllByCreatedAtBetween(Instant t1, Instant t2);
+    List<Payment> findAllByCreditAndCreatedAtBetween(Credit credit, Instant t1, Instant t2);
 
-    @Query("select sum(p.amount) from Payment p where p.createdAt between :t1 and :t2")
-    BigDecimal sumAllByCreatedAtBetween(@Param("t1") Instant t1, @Param("t2") Instant t2);
+    @Query("select sum(p.amount) from Payment p where p.credit = :credit and p.createdAt between :t1 and :t2")
+    BigDecimal sumAllByCreditAndCreatedAtBetween(
+            @Param("credit") Credit credit,
+            @Param("t1") Instant t1,
+            @Param("t2") Instant t2
+    );
 }
