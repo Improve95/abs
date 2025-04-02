@@ -31,7 +31,6 @@ public class PenaltyServiceImp implements PenaltyService {
     @Transactional
     @Override
     public BigDecimal editPenaltyAfterPayment(BigDecimal paymentAmount, Credit credit) {
-        BigDecimal remainAmountInPayment = paymentAmount;
         for (PenaltyType penaltyType : checkPenaltyTypes) {
             Pageable page = PageRequest.of(0, Integer.MAX_VALUE);
             Page<Penalty> penaltyPage = penaltyRepository.findAllByCreditAndTypeAndStatus(
@@ -41,10 +40,10 @@ public class PenaltyServiceImp implements PenaltyService {
                     page
             );
             for (Penalty penalty : penaltyPage) {
-                remainAmountInPayment = processingPenalty(penalty, remainAmountInPayment);
+                paymentAmount = processingPenalty(penalty, paymentAmount);
             }
         }
-        return remainAmountInPayment;
+        return paymentAmount;
     }
 
     @Transactional

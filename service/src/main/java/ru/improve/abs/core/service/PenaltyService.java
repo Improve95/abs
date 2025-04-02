@@ -6,6 +6,5 @@ import java.math.BigDecimal;
 
 public interface PenaltyService {
 
-
     BigDecimal editPenaltyAfterPayment(BigDecimal paymentAmount, Credit credit);
 }

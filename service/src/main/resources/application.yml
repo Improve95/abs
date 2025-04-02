@@ -6,6 +6,10 @@ spring:
     name: abs-service
   config:
     import: optional:file:.env[.properties]
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yml
   cache:
     cache-names:
       - security/acl
@@ -15,11 +19,11 @@ spring:
       hibernate:
         format_sql: true
 
-  datasource:
-    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+#  datasource:
+#    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}
+#    username: ${PG_USER}
+#    password: ${PG_PASSWORD}
+#    driver-class-name: org.postgresql.Driver
 
   acl-datasource:
     url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}

@@ -1,6 +1,5 @@
 package ru.improve.abs.core.service.imp;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,8 +29,6 @@ public class BalanceServiceImp implements BalanceService {
     private final BalanceRepository balanceRepository;
 
     private final BalanceMapper balanceMapper;
-
-    private final EntityManager em;
 
     @Transactional
     @Override

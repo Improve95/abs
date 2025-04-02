@@ -53,9 +53,10 @@ public class ProcessingBalanceServiceImp implements ProcessingBalanceService {
         LocalDate creditTakingDate = credit.getTakingDate();
         Period period = Period.between(creditTakingDate, todayDate);
         int monthCount = period.getMonths();
-        int checkDayInCurrentMonth = creditTakingDate.plusDays(
-                (monthCount + 1) * paymentPeriodConfig.getPaymentDuration().toDays()
-        ).getDayOfMonth();
+        LocalDate nextDate = creditTakingDate.plusDays(
+                monthCount * paymentPeriodConfig.getPaymentDuration().toDays()
+        );
+        int checkDayInCurrentMonth = nextDate.getDayOfMonth();
         if (todayDate.getDayOfMonth() == checkDayInCurrentMonth) {
             isNewPaymentPeriod = true;
             BigDecimal remainingMonthDebt = lastBalance.getRemainingMonthDebt();

@@ -13,6 +13,7 @@ import ru.improve.abs.core.service.PaymentService;
 import ru.improve.abs.core.service.PenaltyService;
 import ru.improve.abs.model.Payment;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @RequiredArgsConstructor
@@ -38,8 +39,11 @@ public class PaymentServiceImp implements PaymentService {
 
         payment = paymentRepository.save(payment);
 
-        penaltyService.editPenaltyAfterPayment(payment.getAmount(), payment.getCredit());
-        balanceService.editBalanceAfterPayment(payment.getAmount(), payment.getCredit());
+        BigDecimal remainPaymentAmount = penaltyService.editPenaltyAfterPayment(
+                payment.getAmount(),
+                payment.getCredit()
+        );
+        balanceService.editBalanceAfterPayment(remainPaymentAmount, payment.getCredit());
 
         return balanceMapper.toPostPaymentResponse(payment);
     }
