@@ -53,9 +53,6 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.9.5'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-
 	implementation 'org.mapstruct:mapstruct:1.6.0'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0'
 

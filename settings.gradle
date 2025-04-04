@@ -2,3 +2,5 @@ rootProject.name = 'abs-service'
 include 'database'
 include 'service'
 include 'gateway-service'
+include 'auth-service'
+
