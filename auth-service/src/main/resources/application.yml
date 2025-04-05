@@ -27,6 +27,6 @@ spring:
 
 app:
   token:
-    secret: FKHkJNhkjd2dhsNiOghNi4513qjkHtyufTd3wydsjg7SAfUYFdv
+    secret: d23bea1775b4d94df57db8afd49a5a7461703d94ebd54173a8b92aeeaaca4a88
   session:
     duration: 24h

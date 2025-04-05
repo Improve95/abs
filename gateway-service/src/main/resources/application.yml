@@ -10,8 +10,6 @@ spring:
     name: gateway-service
   config:
     import: optional:file:.env[.properties]
-  main:
-    web-application-type: reactive
   cloud:
     gateway:
       routes:
@@ -19,26 +17,26 @@ spring:
           uri: ${AUTH_SERVICE_URI}
           predicates:
             - Path=/auth/**
-            -
         - id: information-service
           uri: ${INFO_SERVICE_URI}
           predicates:
             - Path=/info/**
-            -
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
+          filters:
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
 
-  datasource:
-    url: jdbc:postgresql://${AUTH_PG_HOST}:${AUTH_PG_PORT}/${AUTH_PG_DATABASE}
-    username: ${AUTH_PG_USER}
-    password: ${AUTH_PG_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-
-app:
-  token:
-    secret: FKHkJNhkjd2dhsNiOghNi4513qjkHtyufTd3wydsjg7SAfUYFdv
-  session:
-    duration: 24h
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: spring-auth-server
+            client-id: gateway-server
+            client-secret: my-secret
+            authorization-grant-type: authorization_code
+            # redirection url after authentication is succsessful
+            redirect-uri: ${GATEWAY_SERVICE_PORT}/login/oauth2/code/{registrationId}
+            scope: openid, resource.read
+        provider:
+          spring-auth-server:
+            issuer-uri: ${AUTH_SERVICE_URI}
