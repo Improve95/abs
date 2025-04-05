@@ -10,6 +10,8 @@ spring:
     name: gateway-service
   config:
     import: optional:file:.env[.properties]
+  main:
+    web-application-type: reactive
   cloud:
     gateway:
       routes:
@@ -22,3 +24,21 @@ spring:
           uri: ${INFO_SERVICE_URI}
           predicates:
             - Path=/info/**
+            -
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: jdbc:postgresql://${AUTH_PG_HOST}:${AUTH_PG_PORT}/${AUTH_PG_DATABASE}
+    username: ${AUTH_PG_USER}
+    password: ${AUTH_PG_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+app:
+  token:
+    secret: FKHkJNhkjd2dhsNiOghNi4513qjkHtyufTd3wydsjg7SAfUYFdv
+  session:
+    duration: 24h

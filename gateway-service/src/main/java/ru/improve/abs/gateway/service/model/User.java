@@ -1,4 +1,4 @@
-package ru.improve.abs.auth.service.model;
+package ru.improve.abs.gateway.service.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

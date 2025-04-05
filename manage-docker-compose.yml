@@ -1,0 +1,31 @@
+services:
+  postgres:
+    container_name: ${MANAGE_DB_COMPOSE_PROJECT_NAME}
+  
+    env_file:
+      - .env
+    image: 'postgres:16.4'
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DATABASE}
+    ports:
+      - "${PG_PORT}:5432"
+
+  flyway:
+    container_name: ${MANAGE_FLYWAY_COMPOSE_PROJECT_NAME}
+    env_file:
+      - .env
+    environment:
+      FLYWAY_URL: jdbc:postgresql://postgres:${PG_PORT}/${PG_DATABASE}
+      FLYWAY_USER: ${PG_USER}
+      FLYWAY_PASSWORD: ${PG_PASSWORD}
+    command:
+      - migrate
+    volumes:
+      - ./manage-service/src/main/resources/flyway/migrations:/flyway/sql
+    image: 'flyway/flyway:11.4'
+    depends_on:
+      postgres:
+        condition: service_started
+        restart: true

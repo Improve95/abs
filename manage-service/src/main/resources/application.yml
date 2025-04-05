@@ -1,5 +1,5 @@
 server:
-  port: ${AUTH_SERVICE_PORT}
+  port: ${INFO_SERVICE_PORT}
 
 spring:
   application:
@@ -9,21 +9,24 @@ spring:
   docker:
     compose:
       enabled: false
-      file: auth-docker-compose.yml
-#  cache:
-#    cache-names:
-#      - security/acl
+      file: manage-docker-compose.yml
+  cache:
+    cache-names:
+      - security/acl
   jpa:
     show-sql: false
     properties:
       hibernate:
         format_sql: true
 
-  acl-datasource:
-    url: jdbc:postgresql://${AUTH_PG_HOST}:${AUTH_PG_PORT}/${AUTH_PG_DATABASE}
-    username: ${AUTH_PG_USER}
-    password: ${AUTH_PG_PASSWORD}
+  datasource:
+    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}
+    username: ${PG_USER}
+    password: ${PG_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
+credit:
+  payment-duration: 30d
 
 app:
   token:
