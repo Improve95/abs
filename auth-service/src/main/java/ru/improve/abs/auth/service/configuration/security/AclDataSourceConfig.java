@@ -7,11 +7,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.acl-datasource", ignoreUnknownFields = false)
 public class AclDataSourceConfig {
 
-    private String url;
-
-    private String username;
-
-    private String password;
-
-    private String driverClassName;
+//    private String url;
+//
+//    private String username;
+//
+//    private String password;
+//
+//    private String driverClassName;
 }

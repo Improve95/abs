@@ -21,22 +21,5 @@ spring:
           uri: ${INFO_SERVICE_URI}
           predicates:
             - Path=/info/**
-          filters:
-            - TokenRelay=
-            - RemoveRequestHeader=Cookie
-
-  security:
-    oauth2:
-      client:
-        registration:
-          gateway:
-            provider: spring-auth-server
-            client-id: gateway-server
-            client-secret: my-secret
-            authorization-grant-type: authorization_code
-            # redirection url after authentication is succsessful
-            redirect-uri: ${GATEWAY_SERVICE_PORT}/login/oauth2/code/{registrationId}
-            scope: openid, resource.read
-        provider:
-          spring-auth-server:
-            issuer-uri: ${AUTH_SERVICE_URI}
+filter:
+  server-url: ${AUTH_SERVICE_URI}

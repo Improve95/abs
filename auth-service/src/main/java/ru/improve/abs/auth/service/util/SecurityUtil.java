@@ -2,8 +2,9 @@ package ru.improve.abs.auth.service.util;
 
 import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class SecurityUtil {
+public final class SecurityUtil {
+
+    public static final String ROLE_AUTHORITY_CLAIM = "roleAuthorityClaim";
 
     public static final String SESSION_ID_CLAIM = "sessionId";
 

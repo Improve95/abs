@@ -6,7 +6,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.sql.SQLException;
 
-@UtilityClass
 public class DatabaseUtil {
 
     public static final String UNIQUE_CONSTRAINT_SQL_STATE = "23505";

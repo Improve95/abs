@@ -19,14 +19,21 @@ spring:
       hibernate:
         format_sql: true
 
-  acl-datasource:
+  datasource:
     url: jdbc:postgresql://${AUTH_PG_HOST}:${AUTH_PG_PORT}/${AUTH_PG_DATABASE}
     username: ${AUTH_PG_USER}
     password: ${AUTH_PG_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
-app:
+#  acl-datasource:
+#    url: jdbc:postgresql://${AUTH_PG_HOST}:${AUTH_PG_PORT}/${AUTH_PG_DATABASE}
+#    username: ${AUTH_PG_USER}
+#    password: ${AUTH_PG_PASSWORD}
+#    driver-class-name: org.postgresql.Driver
+
+security:
   token:
-    secret: d23bea1775b4d94df57db8afd49a5a7461703d94ebd54173a8b92aeeaaca4a88
+    gateway-secret: ${GATEWAY_CLIENT_SECRET}
+    client-secret: ${CLIENT_SECRET}
   session:
     duration: 24h

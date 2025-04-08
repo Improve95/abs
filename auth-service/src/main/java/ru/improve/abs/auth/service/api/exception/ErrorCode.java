@@ -22,7 +22,9 @@ public enum ErrorCode {
 
     SESSION_IS_OVER(7),
 
-    ACCESS_DENIED(8);
+    ACCESS_DENIED(8),
+
+    INVALID_JWT_TOKEN(9);
 
     private final int code;
 }

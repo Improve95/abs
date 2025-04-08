@@ -11,8 +11,7 @@ import java.util.stream.Collectors;
 import static ru.improve.abs.processing.service.core.mapper.MapperUtil.MAPPER_UTIL_NAME;
 
 @Named(MAPPER_UTIL_NAME)
-@UtilityClass
-public class MapperUtil {
+public final class MapperUtil {
 
     public static final String MAPPER_UTIL_NAME = "MapperUtil";
 

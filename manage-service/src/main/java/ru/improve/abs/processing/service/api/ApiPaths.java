@@ -2,8 +2,7 @@ package ru.improve.abs.processing.service.api;
 
 import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class ApiPaths {
+public final class ApiPaths {
 
     public static final String USERS = "/users";
 

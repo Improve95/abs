@@ -9,8 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Named(MapperUtil.MAPPER_UTIL_NAME)
-@UtilityClass
-public class MapperUtil {
+public final class MapperUtil {
 
     public static final String MAPPER_UTIL_NAME = "MapperUtil";
 

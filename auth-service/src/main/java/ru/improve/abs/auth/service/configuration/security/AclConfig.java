@@ -1,28 +1,17 @@
 package ru.improve.abs.auth.service.configuration.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.security.acls.domain.AclAuthorizationStrategyImpl;
-import org.springframework.security.acls.domain.ConsoleAuditLogger;
-import org.springframework.security.acls.domain.DefaultPermissionGrantingStrategy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import javax.sql.DataSource;
-
-import static ru.improve.abs.auth.service.util.SecurityUtil.ADMIN_ROLE;
 
 
 @RequiredArgsConstructor
-@Configuration
+//@Configuration
 public class AclConfig {
 
-    private final CacheConfig cacheConfig;
+//    private final CacheConfig cacheConfig;
 
-    private final AclDataSourceConfig aclDataSourceConfig;
+//    private final AclDataSourceConfig aclDataSourceConfig;
 
-    @Bean
+    /*@Bean
     public DataSource aclDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl(aclDataSourceConfig.getUrl());
@@ -45,7 +34,7 @@ public class AclConfig {
     @Bean
     public AclAuthorizationStrategyImpl aclAuthorizationStrategy() {
         return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority(ADMIN_ROLE));
-    }
+    }*/
 
     /*@Bean
     public SpringCacheBasedAclCache cacheBasedAclCache(CacheManager cacheManager) {

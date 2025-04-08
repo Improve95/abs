@@ -35,6 +35,11 @@ public class TokenServiceImp implements TokenService {
                 .expiresAt(session.getExpiredAt())
                 .claim(SESSION_ID_CLAIM, session.getId())
                 .build();
+        return generateToken(claims);
+    }
+
+    @Override
+    public Jwt generateToken(JwtClaimsSet claims) {
         JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims));
     }

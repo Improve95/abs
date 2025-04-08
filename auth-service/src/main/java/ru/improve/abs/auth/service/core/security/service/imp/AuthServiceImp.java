@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,11 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 import ru.improve.abs.auth.service.api.dto.auth.LoginRequest;
 import ru.improve.abs.auth.service.api.dto.auth.LoginResponse;
+import ru.improve.abs.auth.service.api.dto.auth.TokenExchangeResponse;
 import ru.improve.abs.auth.service.api.dto.user.SignInRequest;
 import ru.improve.abs.auth.service.api.dto.user.SignInResponse;
 import ru.improve.abs.auth.service.api.exception.ServiceException;
@@ -35,11 +38,16 @@ import ru.improve.abs.auth.service.model.Session;
 import ru.improve.abs.auth.service.model.User;
 import ru.improve.abs.auth.service.util.database.DatabaseUtil;
 
+import java.util.stream.Collectors;
+
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.ALREADY_EXIST;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
+import static ru.improve.abs.auth.service.api.exception.ErrorCode.INVALID_JWT_TOKEN;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.NOT_FOUND;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.SESSION_IS_OVER;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.UNAUTHORIZED;
+import static ru.improve.abs.auth.service.util.SecurityUtil.ROLE_AUTHORITY_CLAIM;
+import static ru.improve.abs.auth.service.util.SecurityUtil.SESSION_ID_CLAIM;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -98,6 +106,37 @@ public class AuthServiceImp implements AuthService {
                     new ServiceException(UNAUTHORIZED));
             throw exception;
         }
+    }
+
+    @Transactional
+    @Override
+    public TokenExchangeResponse exchangeGatewayToken(HttpServletRequest request) {
+        String stringToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (!stringToken.startsWith("Bearer ")) {
+            throw new ServiceException(INVALID_JWT_TOKEN);
+        }
+        Jwt jwtToken = tokenService.parseJwt(stringToken);
+        long sessionId = tokenService.getSessionId(jwtToken);
+        if (!sessionService.checkSessionEnableById(sessionId)) {
+            throw new ServiceException(SESSION_IS_OVER);
+        }
+
+        UserDetails userDetails = userDetailService.loadUserByUsername(jwtToken.getSubject());
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(userDetails.getUsername())
+                .claim(SESSION_ID_CLAIM, sessionId)
+                .claim(
+                        ROLE_AUTHORITY_CLAIM,
+                        userDetails.getAuthorities().stream()
+                                .map(String::valueOf)
+                                .collect(Collectors.joining(","))
+                )
+                .build();
+        Jwt exchangeJwtToken = tokenService.generateToken(claims);
+
+        return TokenExchangeResponse.builder()
+                .token(exchangeJwtToken.getTokenValue())
+                .build();
     }
 
     @Transactional

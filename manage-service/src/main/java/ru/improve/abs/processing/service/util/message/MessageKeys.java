@@ -2,8 +2,7 @@ package ru.improve.abs.processing.service.util.message;
 
 import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class MessageKeys {
+public final class MessageKeys {
 
     public static final String TITLE_INTERNAL_SERVER_ERROR = "title.internal_server_error";
     public static final String TITLE_ILLEGAL_DTO_VALUE = "title.illegal_dto_value";

@@ -1,30 +1,15 @@
 package ru.improve.abs.auth.service.configuration.security;
 
-import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 
 import javax.crypto.SecretKey;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.util.UUID;
 
 @Configuration
 public class AuthServerConfig {
@@ -40,23 +25,21 @@ public class AuthServerConfig {
      }
 
      @Bean
-     public SecretKey secretKey(TokenConfig tokenConfiguration) {
-          return new OctetSequenceKey.Builder(tokenConfiguration.getSecret().getBytes()).build().toSecretKey();
+     public SecretKey secretKey(TokenConfig tokenConfig) {
+          return new OctetSequenceKey.Builder(tokenConfig.getClientSecret().getBytes()).build().toSecretKey();
      }
 
-     @Bean
-     public RegisteredClientRepository registeredClientRepository() {
+     /*@Bean
+     public RegisteredClientRepository registeredClientRepository(ClientConfig clientConfig, TokenConfig tokenConfig) {
           RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                  .clientId("gateway")
-                  .clientSecret("{noop}secret")
+                  .clientId(clientConfig.getId())
+                  .clientSecret(tokenConfig.getClientSecret())
                   .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                   .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                   .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                   .redirectUri("http://127.0.0.1:8080/login/oauth2/code/gateway")
                   .scope(OidcScopes.OPENID)
-                  .scope("resource.read")
                   .build();
-
           return new InMemoryRegisteredClientRepository(registeredClient);
      }
 
@@ -87,7 +70,7 @@ public class AuthServerConfig {
                throw new IllegalStateException(ex);
           }
           return keyPair;
-     }
+     }*/
 
      /*@Bean
      public ProviderSettings providerSettings() {

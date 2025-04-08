@@ -2,8 +2,7 @@ package ru.improve.abs.auth.service.util.message;
 
 import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class MessageKeys {
+public final class MessageKeys {
 
     public static final String TITLE_INTERNAL_SERVER_ERROR = "title.internal_server_error";
     public static final String TITLE_ILLEGAL_DTO_VALUE = "title.illegal_dto_value";
@@ -12,6 +11,7 @@ public class MessageKeys {
 
     public static final String TITLE_ACCESS_DENIED = "title.access_denied";
 
+    public static final String TITLE_INVALID_JWT = "title.invalid.jwt_token";
     public static final String TITLE_UNAUTHORIZED = "title.unauthorized";
     public static final String TITLE_SESSION_IS_OVER = "session.is_over";
     public static final String SESSION_TOKEN_INVALID = "session.token_invalid";
