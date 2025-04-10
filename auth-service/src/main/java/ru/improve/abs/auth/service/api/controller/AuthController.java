@@ -1,10 +1,10 @@
 package ru.improve.abs.auth.service.api.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,7 @@ import static ru.improve.abs.auth.service.api.ApiPaths.AUTH;
 import static ru.improve.abs.auth.service.api.ApiPaths.LOGIN;
 import static ru.improve.abs.auth.service.api.ApiPaths.LOGOUT;
 import static ru.improve.abs.auth.service.api.ApiPaths.SIGN_IN;
+import static ru.improve.abs.auth.service.api.ApiPaths.TOKEN;
 import static ru.improve.abs.auth.service.api.ApiPaths.TOKEN_EXCHANGE;
 
 @RequiredArgsConstructor
@@ -30,9 +31,9 @@ public class AuthController implements AuthControllerSpec {
 
     private final AuthService authService;
 
-    @GetMapping(TOKEN_EXCHANGE)
-    public ResponseEntity<TokenExchangeResponse> gatewayTokenExchange(HttpServletRequest request) {
-        return ResponseEntity.ok(authService.exchangeGatewayToken(request));
+    @GetMapping(TOKEN_EXCHANGE + TOKEN)
+    public ResponseEntity<TokenExchangeResponse> gatewayTokenExchange(@PathVariable String token) {
+        return ResponseEntity.ok(authService.exchangeGatewayToken(token));
     }
 
     @PostMapping(SIGN_IN)

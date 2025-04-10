@@ -8,7 +8,7 @@ spring:
     import: optional:file:.env[.properties]
   docker:
     compose:
-      enabled: false
+      enabled: true
       file: manage-docker-compose.yml
   cache:
     cache-names:
@@ -30,6 +30,6 @@ credit:
 
 app:
   token:
-    secret: FKHkJNhkjd2dhsNiOghNi4513qjkHtyufTd3wydsjg7SAfUYFdv
+    secret: ${CLIENT_SECRET}
   session:
     duration: 24h

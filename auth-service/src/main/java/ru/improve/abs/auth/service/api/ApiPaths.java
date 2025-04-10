@@ -1,7 +1,5 @@
 package ru.improve.abs.auth.service.api;
 
-import lombok.experimental.UtilityClass;
-
 public final class ApiPaths {
 
     public static final String USERS = "/users";
@@ -18,7 +16,9 @@ public final class ApiPaths {
 
     public static final String BECOME = "/become";
 
-    public static final String TOKEN_EXCHANGE = "token_exchange";
+    public static final String TOKEN_EXCHANGE = "/token_exchange";
+
+    public static final String TOKEN = "/{token}";
 
     public static final String ADD = "/add";
 

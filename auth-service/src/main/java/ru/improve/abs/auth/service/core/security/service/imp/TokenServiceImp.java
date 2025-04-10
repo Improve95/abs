@@ -23,9 +23,13 @@ import static ru.improve.abs.auth.service.util.message.MessageKeys.SESSION_TOKEN
 @Service
 public class TokenServiceImp implements TokenService {
 
-    private final JwtEncoder jwtEncoder;
+    private final JwtEncoder microserviceJwtEncoder;
 
-    private final JwtDecoder jwtDecoder;
+    private final JwtDecoder microserviceJwtDecoder;
+
+    private final JwtEncoder clientJwtEncoder;
+
+    private final JwtDecoder clientJwtDecoder;
 
     @Override
     public Jwt generateToken(UserDetails userDetails, Session session) {

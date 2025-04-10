@@ -17,7 +17,7 @@ services:
     env_file:
       - .env
     environment:
-      FLYWAY_URL: jdbc:postgresql://postgres:${PG_PORT}/${PG_DATABASE}
+      FLYWAY_URL: jdbc:postgresql://postgres:5432/${PG_DATABASE}
       FLYWAY_USER: ${PG_USER}
       FLYWAY_PASSWORD: ${PG_PASSWORD}
     command:

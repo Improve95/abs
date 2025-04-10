@@ -8,7 +8,7 @@ spring:
     import: optional:file:.env[.properties]
   docker:
     compose:
-      enabled: false
+      enabled: true
       file: auth-docker-compose.yml
 #  cache:
 #    cache-names:
@@ -33,7 +33,7 @@ spring:
 
 security:
   token:
-    gateway-secret: ${GATEWAY_CLIENT_SECRET}
     client-secret: ${CLIENT_SECRET}
+    microservice-secret: ${MICROSERVICE_SECRET}
   session:
     duration: 24h

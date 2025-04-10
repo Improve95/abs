@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -110,9 +109,8 @@ public class AuthServiceImp implements AuthService {
 
     @Transactional
     @Override
-    public TokenExchangeResponse exchangeGatewayToken(HttpServletRequest request) {
-        String stringToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!stringToken.startsWith("Bearer ")) {
+    public TokenExchangeResponse exchangeGatewayToken(String stringToken) {
+        if (stringToken == null || !stringToken.startsWith("Bearer ")) {
             throw new ServiceException(INVALID_JWT_TOKEN);
         }
         Jwt jwtToken = tokenService.parseJwt(stringToken);

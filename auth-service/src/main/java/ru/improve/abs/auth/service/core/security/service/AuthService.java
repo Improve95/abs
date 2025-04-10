@@ -12,7 +12,7 @@ public interface AuthService {
 
     boolean setAuthentication(HttpServletRequest request, HttpServletResponse response);
 
-    TokenExchangeResponse exchangeGatewayToken(HttpServletRequest request);
+    TokenExchangeResponse exchangeGatewayToken(String stringToken);
 
     SignInResponse signIn(SignInRequest signInRequest);
 

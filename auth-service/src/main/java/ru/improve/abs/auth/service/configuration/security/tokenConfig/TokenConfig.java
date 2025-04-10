@@ -1,4 +1,4 @@
-package ru.improve.abs.auth.service.configuration.security;
+package ru.improve.abs.auth.service.configuration.security.tokenConfig;
 
 import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,5 +9,5 @@ public class TokenConfig {
 
     String clientSecret;
 
-    String gatewaySecret;
+    String microserviceSecret;
 }
