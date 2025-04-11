@@ -76,8 +76,8 @@ public class AuthConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             AuthService authService,
-            CustomAuthEntryPoint customAuthEntryPoint) throws Exception {
-
+            CustomAuthEntryPoint customAuthEntryPoint
+    ) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(

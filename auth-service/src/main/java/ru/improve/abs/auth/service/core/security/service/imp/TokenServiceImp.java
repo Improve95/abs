@@ -15,7 +15,12 @@ import ru.improve.abs.auth.service.api.exception.ServiceException;
 import ru.improve.abs.auth.service.core.security.service.TokenService;
 import ru.improve.abs.auth.service.model.Session;
 
+import java.util.Map;
+
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.ILLEGAL_VALUE;
+import static ru.improve.abs.auth.service.util.SecurityUtil.CLIENT_CODER;
+import static ru.improve.abs.auth.service.util.SecurityUtil.JWT_DECODER;
+import static ru.improve.abs.auth.service.util.SecurityUtil.JWT_ENCODER;
 import static ru.improve.abs.auth.service.util.SecurityUtil.SESSION_ID_CLAIM;
 import static ru.improve.abs.auth.service.util.message.MessageKeys.SESSION_TOKEN_INVALID;
 
@@ -23,13 +28,9 @@ import static ru.improve.abs.auth.service.util.message.MessageKeys.SESSION_TOKEN
 @Service
 public class TokenServiceImp implements TokenService {
 
-    private final JwtEncoder microserviceJwtEncoder;
+    private final Map<String, JwtEncoder> jwtEncoderMap;
 
-    private final JwtDecoder microserviceJwtDecoder;
-
-    private final JwtEncoder clientJwtEncoder;
-
-    private final JwtDecoder clientJwtDecoder;
+    private final Map<String, JwtDecoder> jwtDecoderMap;
 
     @Override
     public Jwt generateToken(UserDetails userDetails, Session session) {
@@ -45,6 +46,7 @@ public class TokenServiceImp implements TokenService {
     @Override
     public Jwt generateToken(JwtClaimsSet claims) {
         JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+        JwtEncoder jwtEncoder = jwtEncoderMap.get(CLIENT_CODER + JWT_ENCODER);
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims));
     }
 
@@ -56,6 +58,7 @@ public class TokenServiceImp implements TokenService {
     @Override
     public Jwt parseJwt(String jwt) {
         try {
+            JwtDecoder jwtDecoder = jwtDecoderMap.get(CLIENT_CODER + JWT_DECODER);
             return jwtDecoder.decode(jwt);
         } catch (JwtException ex) {
             throw new ServiceException(ILLEGAL_VALUE, SESSION_TOKEN_INVALID, ex.getCause());
