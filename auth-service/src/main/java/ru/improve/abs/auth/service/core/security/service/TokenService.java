@@ -9,9 +9,9 @@ public interface TokenService {
 
     Jwt generateToken(UserDetails userDetails, Session session);
 
-    Jwt generateToken(JwtClaimsSet claims);
+    Jwt generateToken(JwtClaimsSet claims, String encoderType);
 
     long getSessionId(Jwt jwt);
 
-    Jwt parseJwt(String jwt);
+    Jwt parseJwt(String jwt, String encoderType);
 }

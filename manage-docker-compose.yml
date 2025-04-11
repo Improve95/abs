@@ -1,7 +1,6 @@
 services:
   postgres:
     container_name: ${MANAGE_DB_COMPOSE_PROJECT_NAME}
-  
     env_file:
       - .env
     image: 'postgres:16.4'

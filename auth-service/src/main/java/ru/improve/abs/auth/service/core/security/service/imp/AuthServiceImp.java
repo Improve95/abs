@@ -45,6 +45,8 @@ import static ru.improve.abs.auth.service.api.exception.ErrorCode.INVALID_JWT_TO
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.NOT_FOUND;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.SESSION_IS_OVER;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.UNAUTHORIZED;
+import static ru.improve.abs.auth.service.util.SecurityUtil.CLIENT_CODER;
+import static ru.improve.abs.auth.service.util.SecurityUtil.MICROSERVICE_CODER;
 import static ru.improve.abs.auth.service.util.SecurityUtil.ROLE_AUTHORITY_CLAIM;
 import static ru.improve.abs.auth.service.util.SecurityUtil.SESSION_ID_CLAIM;
 
@@ -113,7 +115,7 @@ public class AuthServiceImp implements AuthService {
         if (stringToken == null || !stringToken.startsWith("Bearer ")) {
             throw new ServiceException(INVALID_JWT_TOKEN);
         }
-        Jwt jwtToken = tokenService.parseJwt(stringToken);
+        Jwt jwtToken = tokenService.parseJwt(stringToken, CLIENT_CODER);
         long sessionId = tokenService.getSessionId(jwtToken);
         if (!sessionService.checkSessionEnableById(sessionId)) {
             throw new ServiceException(SESSION_IS_OVER);
@@ -130,7 +132,7 @@ public class AuthServiceImp implements AuthService {
                                 .collect(Collectors.joining(","))
                 )
                 .build();
-        Jwt exchangeJwtToken = tokenService.generateToken(claims);
+        Jwt exchangeJwtToken = tokenService.generateToken(claims, MICROSERVICE_CODER);
 
         return TokenExchangeResponse.builder()
                 .token(exchangeJwtToken.getTokenValue())

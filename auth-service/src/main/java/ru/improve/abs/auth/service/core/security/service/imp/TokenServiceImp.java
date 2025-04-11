@@ -40,13 +40,13 @@ public class TokenServiceImp implements TokenService {
                 .expiresAt(session.getExpiredAt())
                 .claim(SESSION_ID_CLAIM, session.getId())
                 .build();
-        return generateToken(claims);
+        return generateToken(claims, CLIENT_CODER);
     }
 
     @Override
-    public Jwt generateToken(JwtClaimsSet claims) {
+    public Jwt generateToken(JwtClaimsSet claims, String encoderType) {
         JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
-        JwtEncoder jwtEncoder = jwtEncoderMap.get(CLIENT_CODER + JWT_ENCODER);
+        JwtEncoder jwtEncoder = jwtEncoderMap.get(encoderType + JWT_ENCODER);
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims));
     }
 
@@ -56,9 +56,9 @@ public class TokenServiceImp implements TokenService {
     }
 
     @Override
-    public Jwt parseJwt(String jwt) {
+    public Jwt parseJwt(String jwt, String decoderType) {
         try {
-            JwtDecoder jwtDecoder = jwtDecoderMap.get(CLIENT_CODER + JWT_DECODER);
+            JwtDecoder jwtDecoder = jwtDecoderMap.get(decoderType + JWT_DECODER);
             return jwtDecoder.decode(jwt);
         } catch (JwtException ex) {
             throw new ServiceException(ILLEGAL_VALUE, SESSION_TOKEN_INVALID, ex.getCause());
