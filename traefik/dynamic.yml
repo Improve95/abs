@@ -1,10 +1,10 @@
 http:
   routers:
     myapp:
-      rule: "PathPrefix(`/api`)"
+      rule: "PathPrefix(`/auth`)"
       service: myapp-service
   services:
     myapp-service:
       loadBalancer:
         servers:
-          - url: "http://backend:5678"
+          - url: "http://auth-service:8071"

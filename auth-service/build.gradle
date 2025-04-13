@@ -20,15 +20,6 @@ java {
     }
 }
 
-flyway {
-    url = "jdbc:postgresql://${env.fetch('AUTH_PG_HOST')}:${env.fetch('AUTH_PG_PORT')}/${env.fetch('AUTH_PG_DATABASE')}"
-    user = env.fetch('AUTH_PG_USER')
-    password = env.fetch('AUTH_PG_PASSWORD')
-    locations = ['classpath:resources/flyway/migrations']
-    schemas = ['public']
-    cleanDisabled = false
-}
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor

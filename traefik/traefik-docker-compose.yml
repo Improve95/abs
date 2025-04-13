@@ -1,18 +1,18 @@
 services:
   traefik:
     image: traefik:v3.3
-    container_name: ${TRAEFIK_SERVER_PROJECT_NAME}
+    container_name: "traefik"
     env_file:
       - ../.env
     ports:
       - "${TRAEFIK_PORT}:80"
     volumes:
-      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./dynamic.yml:/etc/traefik/dynamic.yml:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - web
+      - abs_service_network
 
 networks:
-  web:
-    driver: bridge
+  abs_service_network:
+    external: true

@@ -1,7 +1,3 @@
 rootProject.name = 'abs-service'
-include (":manage-service")
-project(":manage-service").projectDir = file("manage-service-wrapper/manage-service")
-
-include (":auth-service")
-project(":auth-service").projectDir = file("auth-service-wrapper/auth-service")
+include 'auth-service'
 
