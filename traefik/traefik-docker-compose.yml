@@ -1,0 +1,18 @@
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: ${TRAEFIK_SERVER_PROJECT_NAME}
+    env_file:
+      - ../.env
+    ports:
+      - "${TRAEFIK_PORT}:80"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge

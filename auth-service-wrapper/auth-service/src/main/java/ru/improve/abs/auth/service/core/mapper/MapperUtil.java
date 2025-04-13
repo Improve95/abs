@@ -1,6 +1,5 @@
 package ru.improve.abs.auth.service.core.mapper;
 
-import lombok.experimental.UtilityClass;
 import org.mapstruct.Named;
 import ru.improve.abs.auth.service.model.Role;
 import ru.improve.abs.auth.service.model.User;

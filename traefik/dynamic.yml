@@ -1,0 +1,10 @@
+http:
+  routers:
+    myapp:
+      rule: "PathPrefix(`/api`)"
+      service: myapp-service
+  services:
+    myapp-service:
+      loadBalancer:
+        servers:
+          - url: "http://backend:5678"
