@@ -8,13 +8,18 @@ spring:
     import: optional:file:.env[.properties]
   docker:
     compose:
-      enabled: false
+      enabled: true
       file: auth-database-local-docker-compose.yml
   jpa:
     show-sql: false
     properties:
       hibernate:
         format_sql: true
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${AUTH_PG_USER}
+    password: ${AUTH_PG_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
 security:
   token:

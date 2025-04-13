@@ -33,6 +33,33 @@ services:
     networks:
       - abs_service_network
 
+  auth-service:
+    build:
+      dockerfile: auth-service.dockerfile
+    container_name: "auth-service"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/${AUTH_PG_DATABASE}
+    ports:
+      - "${AUTH_SERVICE_PORT}:8080"
+    networks:
+      - abs_service_network
+
+  traefik:
+    image: traefik:v3.3
+    container_name: "traefik"
+    env_file:
+      - .env
+    ports:
+      - "${TRAEFIK_PORT}:80"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - abs_service_network
+
 networks:
   abs_service_network:
     external: true

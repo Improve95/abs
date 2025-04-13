@@ -1,3 +1,4 @@
 rootProject.name = 'abs-service'
+include 'manage-service'
 include 'auth-service'
 

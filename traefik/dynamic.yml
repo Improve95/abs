@@ -2,9 +2,18 @@ http:
   routers:
     myapp:
       rule: "PathPrefix(`/auth`)"
-      service: myapp-service
+      service: auth-service
+      middlewares:
+        - strip-auth
+
+  middlewares:
+    strip-auth:
+      stripPrefix:
+        prefixes:
+          - "/auth"
+
   services:
-    myapp-service:
+    auth-service:
       loadBalancer:
         servers:
-          - url: "http://auth-service:8071"
+          - url: "http://auth-service:8080"
