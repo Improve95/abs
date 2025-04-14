@@ -35,7 +35,7 @@ import ru.improve.abs.auth.service.core.security.service.TokenService;
 import ru.improve.abs.auth.service.core.service.SessionService;
 import ru.improve.abs.auth.service.model.Session;
 import ru.improve.abs.auth.service.model.User;
-import ru.improve.abs.auth.service.util.database.DatabaseUtil;
+import ru.improve.abs.auth.service.util.DatabaseUtil;
 
 import java.util.stream.Collectors;
 

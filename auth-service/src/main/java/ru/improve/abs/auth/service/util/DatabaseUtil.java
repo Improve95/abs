@@ -1,4 +1,4 @@
-package ru.improve.abs.auth.service.util.database;
+package ru.improve.abs.auth.service.util;
 
 import lombok.experimental.UtilityClass;
 import org.hibernate.exception.ConstraintViolationException;

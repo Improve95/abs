@@ -8,7 +8,7 @@ import ru.improve.abs.auth.service.api.dto.auth.LoginResponse;
 import ru.improve.abs.auth.service.api.dto.user.SignInRequest;
 import ru.improve.abs.auth.service.api.dto.user.SignInResponse;
 
-import static ru.improve.abs.auth.service.util.message.MessageKeys.SWAGGER_SECURITY_SCHEME_NAME;
+import static ru.improve.abs.auth.service.util.MessageKeys.SWAGGER_SECURITY_SCHEME_NAME;
 
 public interface AuthControllerSpec {
 

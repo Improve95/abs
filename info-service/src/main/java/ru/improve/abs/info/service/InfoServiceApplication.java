@@ -1,4 +1,4 @@
-package ru.improve.abs.auth.service;
+package ru.improve.abs.info.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @ConfigurationPropertiesScan
 @SpringBootApplication
-public class AuthServiceApplication {
+public class InfoServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthServiceApplication.class, args);
+        SpringApplication.run(InfoServiceApplication.class, args);
     }
 }

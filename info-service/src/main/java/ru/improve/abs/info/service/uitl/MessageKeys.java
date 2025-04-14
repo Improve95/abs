@@ -1,6 +1,4 @@
-package ru.improve.abs.auth.service.util.message;
-
-import lombok.experimental.UtilityClass;
+package ru.improve.abs.info.service.uitl;
 
 public final class MessageKeys {
 

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
-import static ru.improve.abs.auth.service.util.message.MessageKeys.SWAGGER_SECURITY_SCHEME_NAME;
+import static ru.improve.abs.auth.service.util.MessageKeys.SWAGGER_SECURITY_SCHEME_NAME;
 
 @Configuration
 @SecurityScheme(

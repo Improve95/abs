@@ -40,7 +40,7 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_URL: jdbc:postgresql://postgres:5432/${AUTH_PG_DATABASE}
+      DOCKER_AUTH_POSTGRES_URL: jdbc:postgresql://postgres:5432/${AUTH_PG_DATABASE}
     ports:
       - "${AUTH_SERVICE_PORT}:8080"
     networks:

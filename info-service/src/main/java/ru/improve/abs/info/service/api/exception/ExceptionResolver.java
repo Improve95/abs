@@ -1,4 +1,4 @@
-package ru.improve.abs.auth.service.api.exception;
+package ru.improve.abs.info.service.api.exception;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +17,20 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.improve.abs.auth.service.api.exception.ErrorCode.ACCESS_DENIED;
-import static ru.improve.abs.auth.service.api.exception.ErrorCode.ALREADY_EXIST;
-import static ru.improve.abs.auth.service.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
-import static ru.improve.abs.auth.service.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
-import static ru.improve.abs.auth.service.api.exception.ErrorCode.NOT_FOUND;
-import static ru.improve.abs.auth.service.api.exception.ErrorCode.SESSION_IS_OVER;
-import static ru.improve.abs.auth.service.api.exception.ErrorCode.UNAUTHORIZED;
-import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_ACCESS_DENIED;
-import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_ALREADY_EXIST;
-import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_ILLEGAL_DTO_VALUE;
-import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_INTERNAL_SERVER_ERROR;
-import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_NOT_FOUND;
-import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_SESSION_IS_OVER;
-import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_UNAUTHORIZED;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.ACCESS_DENIED;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.ALREADY_EXIST;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.NOT_FOUND;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.SESSION_IS_OVER;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.UNAUTHORIZED;
+import static ru.improve.abs.info.service.uitl.MessageKeys.TITLE_ACCESS_DENIED;
+import static ru.improve.abs.info.service.uitl.MessageKeys.TITLE_ALREADY_EXIST;
+import static ru.improve.abs.info.service.uitl.MessageKeys.TITLE_ILLEGAL_DTO_VALUE;
+import static ru.improve.abs.info.service.uitl.MessageKeys.TITLE_INTERNAL_SERVER_ERROR;
+import static ru.improve.abs.info.service.uitl.MessageKeys.TITLE_NOT_FOUND;
+import static ru.improve.abs.info.service.uitl.MessageKeys.TITLE_SESSION_IS_OVER;
+import static ru.improve.abs.info.service.uitl.MessageKeys.TITLE_UNAUTHORIZED;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -74,7 +74,7 @@ public class ExceptionResolver {
         if (ex instanceof ServiceException serviceEx) {
             return resolveServiceException(serviceEx);
         } else if (ex instanceof MethodArgumentNotValidException ||
-                   ex instanceof HandlerMethodValidationException) {
+                ex instanceof HandlerMethodValidationException) {
             return resolveDtoException(ex);
         } else if (ex instanceof AuthorizationDeniedException authDeniedException) {
             return resolveAccessDeniedException(authDeniedException);

@@ -4,7 +4,7 @@ spring:
       enabled: false
 
   datasource:
-    url: ${POSTGRES_URL}
+    url: ${DOCKER_AUTH_POSTGRES_URL}
     username: ${AUTH_PG_USER}
     password: ${AUTH_PG_PASSWORD}
     driver-class-name: org.postgresql.Driver
