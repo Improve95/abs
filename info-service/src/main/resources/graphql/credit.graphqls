@@ -1,5 +1,5 @@
 type Query {
-    credit(id: ID, pageNumber: Int!, pageSize: Int!, filter: CreditFilter): [Credit]
+    credit(pageNumber: Int!, pageSize: Int!, filter: CreditFilter): [Credit]
 }
 
 type Credit {
@@ -15,6 +15,24 @@ type Credit {
     payments(page: Int!, limit: Int!): [Payment]
     balances: [Balance]
     penalties: [Penalty]
+}
+
+enum CreditStatus {
+    CREATE
+    OPEN
+    CLOSE
+}
+
+input CreditFilter {
+    id: ID
+    status: CreditStatus
+    initialAmountFilter: InitialAmountFilter
+}
+
+input InitialAmountFilter {
+    gt: Float
+    in: Float
+    lt: Float
 }
 
 type CreditTariff {
@@ -60,12 +78,6 @@ type Penalty {
     status: PenaltyStatus
 }
 
-    enum CreditStatus {
-    CREATE
-    OPEN
-    CLOSE
-}
-
 enum PenaltyType {
     MAIN_DEBT_REMAIN
     FIX
@@ -75,8 +87,4 @@ enum PenaltyType {
 enum PenaltyStatus {
     PAID
     NOT_PAID
-}
-
-input CreditFilter {
-    status: CreditStatus
 }
