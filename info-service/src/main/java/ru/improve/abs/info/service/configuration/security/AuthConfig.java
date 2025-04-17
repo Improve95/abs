@@ -35,8 +35,8 @@ public class AuthConfig {
                         auth -> auth
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
-
-                                .anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.GET, "/graphiql" + "/**").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(conf -> conf
                         .jwt(Customizer.withDefaults())

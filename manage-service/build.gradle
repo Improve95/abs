@@ -21,9 +21,9 @@ java {
 }
 
 flyway {
-	url = "jdbc:postgresql://${env.fetch('PG_HOST')}:${env.fetch('PG_PORT')}/${env.fetch('PG_DATABASE')}"
-	user = env.fetch('PG_USER')
-	password = env.fetch('PG_PASSWORD')
+	url = "jdbc:postgresql://${env.fetch('CREDIT_PG_HOST')}:${env.fetch('CREDIT_PG_PORT')}/${env.fetch('CREDIT_PG_DATABASE')}"
+	user = env.fetch('CREDIT_PG_USER')
+	password = env.fetch('CREDIT_PG_PASSWORD')
 	locations = ['classpath:flyway/migrations']
 	schemas = ['public']
 	cleanDisabled = false

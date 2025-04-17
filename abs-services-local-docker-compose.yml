@@ -1,5 +1,5 @@
 services:
-  postgres:
+  auth_db_postgres:
     container_name: "auth-postgres"
     env_file:
       - .env
@@ -13,12 +13,12 @@ services:
     networks:
       - abs_service_network
 
-  flyway:
+  auth_flyway:
     container_name: "auth-flyway"
     env_file:
       - .env
     environment:
-      FLYWAY_URL: jdbc:postgresql://postgres:5432/${AUTH_PG_DATABASE}
+      FLYWAY_URL: jdbc:postgresql://auth_db_postgres:5432/${AUTH_PG_DATABASE}
       FLYWAY_USER: ${AUTH_PG_USER}
       FLYWAY_PASSWORD: ${AUTH_PG_PASSWORD}
     command:
@@ -27,7 +27,41 @@ services:
       - ./auth-service/src/main/resources/flyway/migrations:/flyway/sql
     image: 'flyway/flyway:11.4'
     depends_on:
-      postgres:
+      auth_db_postgres:
+        condition: service_started
+        restart: true
+    networks:
+      - abs_service_network
+
+  credit_db_postgres:
+    container_name: "credit-postgres"
+    env_file:
+      - .env
+    image: 'postgres:16.4'
+    environment:
+      POSTGRES_USER: ${CREDIT_PG_USER}
+      POSTGRES_PASSWORD: ${CREDIT_PG_PASSWORD}
+      POSTGRES_DB: ${CREDIT_PG_DATABASE}
+    ports:
+      - "${CREDIT_PG_PORT}:5432"
+    networks:
+      - abs_service_network
+
+  credit_flyway:
+    container_name: "credit-flyway"
+    env_file:
+      - .env
+    environment:
+      FLYWAY_URL: jdbc:postgresql://credit_db_postgres:5432/${CREDIT_PG_DATABASE}
+      FLYWAY_USER: ${CREDIT_PG_USER}
+      FLYWAY_PASSWORD: ${CREDIT_PG_PASSWORD}
+    command:
+      - migrate
+    volumes:
+      - ./manage-service/src/main/resources/flyway/migrations:/flyway/sql
+    image: 'flyway/flyway:11.4'
+    depends_on:
+      auth_db_postgres:
         condition: service_started
         restart: true
     networks:
@@ -40,9 +74,11 @@ services:
     env_file:
       - .env
     environment:
-      DOCKER_AUTH_POSTGRES_URL: jdbc:postgresql://postgres:5432/${AUTH_PG_DATABASE}
+      DOCKER_AUTH_POSTGRES_URL: jdbc:postgresql://auth_db_postgres:5432/${AUTH_PG_DATABASE}
     ports:
       - "${AUTH_SERVICE_PORT}:8080"
+    depends_on:
+      - auth_db_postgres
     networks:
       - abs_service_network
 

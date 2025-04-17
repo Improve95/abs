@@ -79,9 +79,18 @@ public class ExceptionResolver {
         } else if (ex instanceof AuthorizationDeniedException authDeniedException) {
             return resolveAccessDeniedException(authDeniedException);
         }
+        return resolveServiceException(ex);
+    }
+
+    private ErrorCodeMessagePair resolveServiceException(Exception ex) {
+        StringBuilder message = new StringBuilder();
+        message.append(resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), null));
+        if (ex.getCause() != null && ex.getCause().getMessage() != null) {
+            message.append(", cause " + ex.getCause().getMessage());
+        }
         return ErrorCodeMessagePair.of(
                 INTERNAL_SERVER_ERROR,
-                resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), null)
+                message.toString()
         );
     }
 
