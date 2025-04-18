@@ -61,6 +61,7 @@ public class ExceptionResolver {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> resolveHandleException(Exception ex) {
+        log.error("{}", ex);
         ErrorCodeMessagePair errorCode = resolveException(ex);
         return ResponseEntity.status(httpStatusMap.get(errorCode.code))
                 .body(ErrorResponse.builder()
