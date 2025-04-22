@@ -1,5 +1,6 @@
 package ru.improve.abs.info.service.core.service.imp;
 
+import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.improve.abs.info.service.api.dto.payment.PaymentRequest;
@@ -22,7 +23,7 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Map<Long, PaymentResponse> getBatchPayments(Set<Long> creditIds, PaymentRequest paymentRequest) {
+    public Map<Long, PaymentResponse> getBatchPayments(Set<Long> creditIds, DataFetchingEnvironment env) {
         return Map.of();
     }
 }

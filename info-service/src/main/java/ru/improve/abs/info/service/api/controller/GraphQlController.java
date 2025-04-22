@@ -30,8 +30,8 @@ public class GraphQlController {
 
     @QueryMapping
     public List<CreditResponse> credits(
-            @Argument(name = "page") PageableDto page,
-            @Argument(name = "filter") CreditFilter filter
+            @Argument PageableDto page,
+            @Argument CreditFilter filter
     ) {
         return creditService.getCredits(CreditRequest.builder()
                 .pageableDto(page)
@@ -47,15 +47,5 @@ public class GraphQlController {
     ) {
         DataLoader<Long, List<PaymentResponse>> dataLoader = env.getDataLoader(PAYMENT_DATA_LOADER);
         return dataLoader.load(creditResponse.getId(), env);
-        /*return Map.of(
-                creditResponses.getFirst(),
-                List.of(PaymentResponse.builder()
-                        .id(1)
-                        .amount(BigDecimal.valueOf(4312.32))
-                        .build()));*/
-        /*return List.of(PaymentResponse.builder()
-                .id(1)
-                .amount(BigDecimal.valueOf(4312.32))
-                .build());*/
     }
 }

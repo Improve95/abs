@@ -30,9 +30,8 @@ input CreditFilter {
 }
 
 input InitialAmountFilter {
-    gt: Float
-    in: Float
-    lt: Float
+    gte: Float
+    lte: Float
 }
 
 type CreditTariff {

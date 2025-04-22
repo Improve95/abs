@@ -14,7 +14,7 @@ import static ru.improve.abs.info.service.uitl.GraphQlUtil.PAYMENT_DATA_LOADER;
 
 @RequiredArgsConstructor
 @Component
-public class DataLoaderInterceptor implements WebGraphQlInterceptor{
+public class DataLoaderInterceptor implements WebGraphQlInterceptor {
 
     private final DataLoader<Long, PaymentResponse> paymentDataLoader;
 
