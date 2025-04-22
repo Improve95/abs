@@ -36,10 +36,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-graphql'
 
-//    implementation 'org.springframework.boot:spring-boot-starter-graphql'
-    implementation 'com.graphql-java:graphql-java:20.9'
-    implementation 'io.leangen.graphql:graphql-spqr-spring-boot-starter:1.0.1'
+//    implementation 'com.graphql-java:java-dataloader:4.0.0'
+//    implementation 'com.graphql-java:graphql-java:20.9'
+//    implementation 'io.leangen.graphql:graphql-spqr-spring-boot-starter:1.0.1'
 //    implementation 'io.leangen.graphql:spqr:0.12.4'
 
 //    implementation 'org.springframework.security:spring-security-acl'

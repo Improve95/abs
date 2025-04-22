@@ -1,5 +1,5 @@
 type Query {
-    credit(pageNumber: Int!, pageSize: Int!, filter: CreditFilter): [Credit]
+    credits(page: Page!, filter: CreditFilter): [Credit]
 }
 
 type Credit {
@@ -12,7 +12,7 @@ type Credit {
     creditStatus: CreditStatus
     userId: ID
     creditTariff: CreditTariff
-    payments(page: Int!, limit: Int!): [Payment]
+    payments(page: Page!, filter: PaymentFilter): [Payment]
     balances: [Balance]
     penalties: [Penalty]
 }
@@ -62,6 +62,10 @@ type Payment {
     credit: Credit
 }
 
+input PaymentFilter {
+    id: ID
+}
+
 type Balance {
     id: ID
     credit: Credit
@@ -87,4 +91,9 @@ enum PenaltyType {
 enum PenaltyStatus {
     PAID
     NOT_PAID
+}
+
+input Page {
+    pageNumber: Int!,
+    pageSize: Int!
 }

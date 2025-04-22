@@ -16,12 +16,10 @@ spring:
     username: ${CREDIT_PG_USER}
     password: ${CREDIT_PG_PASSWORD}
     driver-class-name: org.postgresql.Driver
+  graphql:
+    graphiql:
+      enabled: true
 
 security:
   token:
     microservice-secret: ${MICROSERVICE_SECRET}
-
-graphql:
-  spqr:
-    gui:
-      enabled: true

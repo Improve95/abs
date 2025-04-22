@@ -1,56 +1,61 @@
 package ru.improve.abs.info.service.api.controller;
 
-import io.leangen.graphql.annotations.GraphQLArgument;
-import io.leangen.graphql.annotations.GraphQLContext;
-import io.leangen.graphql.annotations.GraphQLNonNull;
-import io.leangen.graphql.annotations.GraphQLQuery;
-import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.dataloader.DataLoader;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.stereotype.Controller;
 import ru.improve.abs.info.service.api.dto.PageableDto;
 import ru.improve.abs.info.service.api.dto.credit.CreditFilter;
 import ru.improve.abs.info.service.api.dto.credit.CreditRequest;
 import ru.improve.abs.info.service.api.dto.credit.CreditResponse;
-import ru.improve.abs.info.service.api.dto.payment.PaymentFilter;
-import ru.improve.abs.info.service.api.dto.payment.PaymentRequest;
 import ru.improve.abs.info.service.api.dto.payment.PaymentResponse;
 import ru.improve.abs.info.service.core.service.CreditService;
 import ru.improve.abs.info.service.core.service.PaymentService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-@GraphQLApi
+import static ru.improve.abs.info.service.uitl.GraphQlUtil.PAYMENT_DATA_LOADER;
+
 @RequiredArgsConstructor
-@Service
+@Controller
 public class GraphQlController {
 
     private final CreditService creditService;
 
     private final PaymentService paymentService;
 
-//    @QueryMapping(name = "credit")
-    @GraphQLQuery
+    @QueryMapping
     public List<CreditResponse> credits(
-            @GraphQLArgument(name = "page") @GraphQLNonNull PageableDto pageableDto,
-            @GraphQLArgument(name = "filter") CreditFilter creditFilter
+            @Argument(name = "page") PageableDto page,
+            @Argument(name = "filter") CreditFilter filter
     ) {
         return creditService.getCredits(CreditRequest.builder()
-                .pageableDto(pageableDto)
-                .creditFilter(creditFilter)
+                .pageableDto(page)
+                .creditFilter(filter)
                 .build()
         );
     }
 
-    @GraphQLQuery
-    public List<PaymentResponse> payments(
-            @GraphQLContext CreditResponse creditResponse,
-            @GraphQLArgument(name = "page") PageableDto pageableDto,
-            @GraphQLArgument(name = "filter") PaymentFilter paymentFilter
+    @SchemaMapping(field = "payments", typeName = "Credit")
+    public CompletableFuture<List<PaymentResponse>> payments(
+            CreditResponse creditResponse,
+            DataFetchingEnvironment env
     ) {
-        return paymentService.getPayments(PaymentRequest.builder()
-                .pageableDto(pageableDto)
-                .paymentFilter(paymentFilter)
-                .build()
-        );
+        DataLoader<Long, List<PaymentResponse>> dataLoader = env.getDataLoader(PAYMENT_DATA_LOADER);
+        return dataLoader.load(creditResponse.getId(), env);
+        /*return Map.of(
+                creditResponses.getFirst(),
+                List.of(PaymentResponse.builder()
+                        .id(1)
+                        .amount(BigDecimal.valueOf(4312.32))
+                        .build()));*/
+        /*return List.of(PaymentResponse.builder()
+                .id(1)
+                .amount(BigDecimal.valueOf(4312.32))
+                .build());*/
     }
 }
