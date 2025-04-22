@@ -10,5 +10,4 @@ public interface PaymentRepository extends
         JpaRepository<Payment, Long>,
         JpaSpecificationExecutor<Payment> {
 
-
 }

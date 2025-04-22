@@ -12,4 +12,6 @@ public class CreditFilter {
     private CreditStatus creditStatus;
 
     private InitialAmountDriftingFilter initialAmountFilter;
+
+    private Integer userId;
 }

@@ -6,4 +6,6 @@ import lombok.Data;
 public class PaymentFilter {
 
     private Long id;
+
+    private Long creditId;
 }

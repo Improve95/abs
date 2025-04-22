@@ -3,7 +3,6 @@ package ru.improve.abs.info.service.api.dto.payment;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
-import ru.improve.abs.info.service.model.credit.Credit;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -21,5 +20,5 @@ public class PaymentResponse {
 
     private Instant createdAt;
 
-    private Credit credit;
+    private Long creditId;
 }

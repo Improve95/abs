@@ -15,7 +15,7 @@ public final class MapperUtil {
 
     public static final String MAPPER_UTIL_NAME = "MapperUtil";
 
-    public static final String GET_ROLES_ID_FUNC_NAME = "getRolesId";
+    public static final String GET_ROLES_ID_FUNC_NAME = "getRolesId";w
 
     @Named(GET_ROLES_ID_FUNC_NAME)
     public static Set<Integer> getRolesId(User user) {

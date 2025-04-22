@@ -19,8 +19,11 @@ public class DataLoaderConfig {
     }
 
     private MappedBatchLoaderWithContext<Long, PaymentResponse> paymentBatchLoader(PaymentService paymentService) {
-        return (creditIds, env) -> CompletableFuture.supplyAsync(
-                () -> paymentService.getBatchPayments(creditIds, null)
+        return (creditIds, batchLoaderEnvironment) -> CompletableFuture.supplyAsync(
+                () -> {
+                    System.out.println(batchLoaderEnvironment);
+                    return paymentService.getBatchPayments(creditIds, batchLoaderEnvironment);
+                }
         );
     }
 }

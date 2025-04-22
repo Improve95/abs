@@ -27,6 +27,7 @@ input CreditFilter {
     id: ID
     status: CreditStatus
     initialAmountFilter: InitialAmountFilter
+    userId: ID
 }
 
 input InitialAmountFilter {
@@ -63,6 +64,7 @@ type Payment {
 
 input PaymentFilter {
     id: ID
+    creditId: ID
 }
 
 type Balance {
