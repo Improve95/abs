@@ -142,7 +142,7 @@ public class ExceptionResolver {
     }
 
     private ErrorCodeMessagePair resolveAccessDeniedException(AuthorizationDeniedException ex) {
-        String message = resolveMessage(messageKeyMap.get(UNAUTHORIZED), null) + ": " + ex.getMessage();
+        String message = resolveMessage(messageKeyMap.get(UNAUTHORIZED)) + ": " + ex.getMessage();
         return ErrorCodeMessagePair.of(
                 UNAUTHORIZED,
                 message

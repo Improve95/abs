@@ -12,7 +12,7 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/${CREDIT_PG_DATABASE}
+    url: jdbc:postgresql://localhost:${CREDIT_PG_PORT}/${CREDIT_PG_DATABASE}
     username: ${CREDIT_PG_USER}
     password: ${CREDIT_PG_PASSWORD}
     driver-class-name: org.postgresql.Driver

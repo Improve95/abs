@@ -27,12 +27,18 @@ input CreditFilter {
     id: ID
     status: CreditStatus
     initialAmountFilter: InitialAmountFilter
-    userId: ID
+    takingDateFilter: TakingDateFilter
+    userIds: [ID!]
 }
 
 input InitialAmountFilter {
     gte: Float
     lte: Float
+}
+
+input TakingDateFilter {
+    gte: String
+    lte: String
 }
 
 type CreditTariff {
