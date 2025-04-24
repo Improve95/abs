@@ -1,8 +1,8 @@
 package ru.improve.abs.info.service.core.service.imp;
 
 import com.google.common.collect.ImmutableMap;
-import graphql.schema.DataFetchingEnvironment;
-import jakarta.persistence.criteria.Subquery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
 import org.dataloader.BatchLoaderEnvironment;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +17,6 @@ import ru.improve.abs.info.service.core.mapper.PaymentMapper;
 import ru.improve.abs.info.service.core.repository.PaymentRepository;
 import ru.improve.abs.info.service.core.service.PaymentService;
 import ru.improve.abs.info.service.model.Payment;
-import ru.improve.abs.info.service.model.credit.Credit;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,8 +24,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ru.improve.abs.info.service.uitl.GraphQlUtil.FILTER_ARGUMENT;
-import static ru.improve.abs.info.service.uitl.GraphQlUtil.PAGE_ARGUMENT;
 import static ru.improve.abs.info.service.uitl.GraphQlUtil.createCreditSpecFromArguments;
 
 @RequiredArgsConstructor
@@ -48,13 +45,55 @@ public class PaymentServiceImp implements PaymentService {
 
     private final PaymentMapper paymentMapper;
 
+    private final EntityManager em;
+
     @Override
     public List<PaymentResponse> getPayments(PaymentRequest paymentRequest) {
         PageableDto pageableDto = paymentRequest.getPageableDto();
         Pageable page = PageRequest.of(pageableDto.getPageNumber(), pageableDto.getPageSize());
         PaymentFilter paymentFilter = paymentRequest.getPaymentFilter();
+        Set<Long> creditIds = paymentRequest.getCreditIds();
 
         Specification<Payment> paymentSpecification = Specification.where(null);
+        if (!creditIds.isEmpty()) {
+            paymentSpecification = paymentSpecification.and(
+                    ((root, query, criteriaBuilder) -> {
+                        Join<Object, Object> credit = root.join("credit");
+                        return criteriaBuilder.in(credit.get("id")).value(creditIds);
+                    })
+            );
+        }
+
+        /*Specification<Payment> paymentSpecification = Specification.where(null);
+        paymentSpecification = Specification.where(
+                (root, query, criteriaBuilder) -> {
+                    Subquery<Credit> subquery = query.subquery(Credit.class);
+//                    Root<Credit> credit = subquery.from(Credit.class);
+                    return criteriaBuilder.in(root.get("credit")).value(subquery);
+                }
+        );*/
+
+        /*Specification.where(
+                ((root, query, criteriaBuilder) -> {
+                    CriteriaBuilder.In<Credit> inClause = criteriaBuilder.in(root.get("credit"));
+                    for (Long creditId : creditIds) {
+                        inClause.value(title);
+                    }
+                    criteriaQuery.select(root).where(inClause);
+                    criteriaQuery.select(root)
+                            .where(root.get("title")
+                                    .in(titles));
+                    Subquery<Department> subquery = criteriaQuery.subquery(Department.class);
+                    Root<Department> dept = subquery.from(Department.class);
+                    subquery.select(dept)
+                            .distinct(true)
+                            .where(criteriaBuilder.like(dept.get("name"), "%" + searchKey + "%"));
+
+                    criteriaQuery.select(emp)
+                            .where(criteriaBuilder.in(emp.get("department")).value(subquery));
+                })
+        );*/
+
         paymentSpecification = createCreditSpecFromArguments(paymentSpecification, paymentFilter);
 
         return paymentRepository.findAll(paymentSpecification, page).stream()
@@ -67,24 +106,12 @@ public class PaymentServiceImp implements PaymentService {
             Set<Long> creditIds,
             BatchLoaderEnvironment batchLoaderEnvironment
     ) {
-        DataFetchingEnvironment env = (DataFetchingEnvironment) batchLoaderEnvironment.getKeyContextsList().getFirst();
-        PageableDto pageableDto = env.getArgument(PAGE_ARGUMENT);
-        PaymentFilter paymentFilter = env.getArgument(FILTER_ARGUMENT);
-
-        Pageable page = PageRequest.of(pageableDto.getPageNumber(), pageableDto.getPageSize());
-        Specification<Payment> paymentSpecification = Specification.where(
-                (root, query, criteriaBuilder) -> {
-                    Subquery<Credit> subquery = query.subquery(Credit.class);
-//                    Root<Credit> credit = subquery.from(Credit.class);
-                    return criteriaBuilder.in(root.get("credit")).value(subquery);
-                }
-        );
-        paymentSpecification = createCreditSpecFromArguments(paymentSpecification, paymentFilter);
-
-        return paymentRepository.findAll(paymentSpecification, page).stream()
+        PaymentRequest paymentRequest = (PaymentRequest) batchLoaderEnvironment.getKeyContextsList().getFirst();
+        paymentRequest.setCreditIds(creditIds);
+        return getPayments(paymentRequest).stream()
                 .collect(Collectors.toMap(
-                        payment -> payment.getCredit().getId(),
-                        paymentMapper::toPaymentResponse
+                        PaymentResponse::getCreditId,
+                        paymentResponse -> paymentResponse
                 ));
     }
 }

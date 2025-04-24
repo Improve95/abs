@@ -11,6 +11,8 @@ import ru.improve.abs.info.service.api.dto.PageableDto;
 import ru.improve.abs.info.service.api.dto.credit.CreditFilter;
 import ru.improve.abs.info.service.api.dto.credit.CreditRequest;
 import ru.improve.abs.info.service.api.dto.credit.CreditResponse;
+import ru.improve.abs.info.service.api.dto.payment.PaymentFilter;
+import ru.improve.abs.info.service.api.dto.payment.PaymentRequest;
 import ru.improve.abs.info.service.api.dto.payment.PaymentResponse;
 import ru.improve.abs.info.service.core.service.CreditService;
 import ru.improve.abs.info.service.core.service.PaymentService;
@@ -43,9 +45,17 @@ public class GraphQlController {
     @SchemaMapping(field = "payments", typeName = "Credit")
     public CompletableFuture<List<PaymentResponse>> payments(
             CreditResponse creditResponse,
+            @Argument PageableDto page,
+            @Argument PaymentFilter filter,
             DataFetchingEnvironment env
     ) {
         DataLoader<Long, List<PaymentResponse>> dataLoader = env.getDataLoader(PAYMENT_DATA_LOADER);
-        return dataLoader.load(creditResponse.getId(), env);
+        return dataLoader.load(
+                creditResponse.getId(),
+                PaymentRequest.builder()
+                        .pageableDto(page)
+                        .paymentFilter(filter)
+                        .build()
+        );
     }
 }
