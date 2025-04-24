@@ -35,15 +35,8 @@ public class PaymentServiceImp implements PaymentService {
         PageableDto pageableDto = paymentRequest.getPageableDto();
         Pageable page = PageRequest.of(pageableDto.getPageNumber(), pageableDto.getPageSize());
         PaymentFilter paymentFilter = paymentRequest.getPaymentFilter();
-//        Set<Long> creditIds = paymentRequest.getCreditIds();
 
         Specification<Payment> paymentSpecification = Specification.where(null);
-
-        /* может быть вынести во что-то отдельное */
-//        if (!creditIds.isEmpty()) {
-//            paymentSpecification = addJoinEntityByIdSpec(paymentSpecification, "credit", "id", creditIds);
-//        }
-
         paymentSpecification = createSpecFromArguments(paymentSpecification, paymentFilter);
 
         return paymentRepository.findAll(paymentSpecification, page).stream()

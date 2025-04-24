@@ -3,8 +3,8 @@ package ru.improve.abs.info.service.api.dto.credit;
 import lombok.Data;
 import ru.improve.abs.info.service.api.dto.FilterType;
 import ru.improve.abs.info.service.api.dto.FilterTypeEnum;
-import ru.improve.abs.info.service.api.dto.credit.filter.InitialAmountDriftingFilter;
-import ru.improve.abs.info.service.api.dto.credit.filter.TakingDateDriftingFilter;
+import ru.improve.abs.info.service.api.dto.credit.filter.InitialAmountBetweenFilter;
+import ru.improve.abs.info.service.api.dto.credit.filter.TakingDateBetweenFilter;
 import ru.improve.abs.info.service.model.credit.CreditStatus;
 
 import java.util.List;
@@ -16,10 +16,10 @@ public class CreditFilter {
     private Long id;
 
     @FilterType(type = FilterTypeEnum.BETWEEN)
-    private InitialAmountDriftingFilter initialAmountFilter;
+    private InitialAmountBetweenFilter initialAmountFilter;
 
     @FilterType(type = FilterTypeEnum.BETWEEN)
-    private TakingDateDriftingFilter takingDateFilter;
+    private TakingDateBetweenFilter takingDateFilter;
 
     @FilterType(type = FilterTypeEnum.EQUALS)
     private CreditStatus creditStatus;

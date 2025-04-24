@@ -1,6 +1,6 @@
 package ru.improve.abs.info.service.api.dto;
 
-public interface DriftingFilter<T> {
+public interface BetweenFilter<T> {
 
     Comparable<T> getGte();
 

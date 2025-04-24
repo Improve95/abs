@@ -2,7 +2,7 @@ package ru.improve.abs.info.service.uitl;
 
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
-import ru.improve.abs.info.service.api.dto.DriftingFilter;
+import ru.improve.abs.info.service.api.dto.BetweenFilter;
 import ru.improve.abs.info.service.api.dto.FilterType;
 import ru.improve.abs.info.service.api.exception.ServiceException;
 
@@ -52,15 +52,17 @@ public final class GraphQlUtil {
         if (filterType != null) {
             switch (filterType.type()) {
                 case EQUALS -> {
-                    return createEntityFilterSpec(spec, field.getName(), fieldValue);
+                    return createEqualsFilterSpec(spec, field.getName(), fieldValue);
                 }
                 case BETWEEN -> {
-                    if (fieldValue instanceof DriftingFilter driftingFilter) {
-                        return createDriftingFilterSpec(spec, driftingFilter);
+                    if (fieldValue instanceof BetweenFilter betweenFilter) {
+                        return createBetweenFilterSpec(spec, betweenFilter);
                     }
                 }
                 case CONTAINS -> {
-                    
+                    if (fieldValue instanceof Collection<?> collection) {
+                        return addContainsSpec(spec, field.getName(), collection);
+                    }
                 }
                 case JOIN_ENTITY_ID_CONTAINS -> {
                     if (fieldValue instanceof Collection<?> collection) {
@@ -72,7 +74,7 @@ public final class GraphQlUtil {
         return spec;
     }
 
-    private static <T> Specification<T> createEntityFilterSpec(
+    private static <T> Specification<T> createEqualsFilterSpec(
             Specification<T> spec,
             String fieldName,
             Object fieldValue
@@ -80,27 +82,27 @@ public final class GraphQlUtil {
         return spec.and(addEqualsSpec(fieldName, fieldValue));
     }
 
-    private static <T> Specification<T> createDriftingFilterSpec(
+    private static <T> Specification<T> createBetweenFilterSpec(
             Specification<T> spec,
-            DriftingFilter<?> driftingFilter
+            BetweenFilter<?> betweenFilter
     ) {
         try {
-            for (Field field : driftingFilter.getClass().getDeclaredFields()) {
+            for (Field field : betweenFilter.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                Object fieldValue = field.get(driftingFilter);
+                Object fieldValue = field.get(betweenFilter);
                 if (fieldValue != null) {
-                    Class<?> comparableClass = driftingFilter.getComparableClass();
+                    Class<?> comparableClass = betweenFilter.getComparableClass();
                     Comparable<?> castedValue = (Comparable<?>) comparableClass.cast(fieldValue);
                     switch (field.getName()) {
                         case LOWER_THEN_OR_EQUAL_FIELD_NAME -> spec = spec.and(
                                 addLowerThanOrEqualsSpec(
-                                        driftingFilter.getEntityFieldName(),
+                                        betweenFilter.getEntityFieldName(),
                                         (Comparable<Object>) castedValue
                                 )
                         );
                         case GREATER_THEN_OR_EQUAL_FIELD_NAME -> spec = spec.and(
                                 addGraterThanOrEqualsSpec(
-                                        driftingFilter.getEntityFieldName(),
+                                        betweenFilter.getEntityFieldName(),
                                         (Comparable<Object>) castedValue
                                 )
                         );
@@ -141,5 +143,12 @@ public final class GraphQlUtil {
                     return criteriaBuilder.in(credit.get(JOIN_KEY_FIELD_NAME)).value(ids);
                 })
         );
+    }
+
+    private static <T> Specification<T> addContainsSpec(Specification<T> spec,
+                                                        String fieldName,
+                                                        Collection<?> items)
+    {
+        return spec.and((root, query, criteriaBuilder) -> criteriaBuilder.in(root.get(fieldName)).value(items));
     }
 }
