@@ -1,7 +1,6 @@
 package ru.improve.abs.info.service.core.service.imp;
 
 import com.google.common.collect.ImmutableMap;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
 import org.dataloader.BatchLoaderEnvironment;
@@ -45,7 +44,7 @@ public class PaymentServiceImp implements PaymentService {
 
     private final PaymentMapper paymentMapper;
 
-    private final EntityManager em;
+//    private final EntityManager em;
 
     @Override
     public List<PaymentResponse> getPayments(PaymentRequest paymentRequest) {

@@ -8,7 +8,7 @@ spring:
     import: optional:file:.env[.properties]
   docker:
     compose:
-      enabled: true
+      enabled: false
       file: auth-database-local-docker-compose.yml
   jpa:
     show-sql: false
@@ -16,7 +16,8 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: ${DOCKER_AUTH_POSTGRES_URL}
+#    url: ${DOCKER_AUTH_POSTGRES_URL}
+    url: jdbc:postgresql://localhost:${AUTH_PG_PORT}/${AUTH_PG_DATABASE}
     username: ${AUTH_PG_USER}
     password: ${AUTH_PG_PASSWORD}
     driver-class-name: org.postgresql.Driver

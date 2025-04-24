@@ -177,7 +177,19 @@ public class AuthServiceImp implements AuthService {
         }
 
         Session session = sessionService.create(user);
-        Jwt accessTokenJwt = tokenService.generateToken(user, session);
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(user.getUsername())
+                .issuedAt(session.getIssuedAt())
+                .expiresAt(session.getExpiredAt())
+                .claim(SESSION_ID_CLAIM, session.getId())
+                .claim(
+                        ROLE_AUTHORITY_CLAIM,
+                        user.getAuthorities().stream()
+                                .map(String::valueOf)
+                                .collect(Collectors.joining(","))
+                )
+                .build();
+        Jwt accessTokenJwt = tokenService.generateToken(claims, MICROSERVICE_CODER);
 
         LoginResponse loginResponse = authMapper.toLoginResponse(session);
         loginResponse.setAccessToken(accessTokenJwt.getTokenValue());

@@ -26,7 +26,7 @@ import static ru.improve.abs.processing.service.api.ApiPaths.TAKE;
 @Component
 public class FillBaseEntityUtil {
 
-	private String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbDFAZ21haWwuY29tIiwic2Vzc2lvbklkIjoxLCJleHAiOjE3NTMyNTI2NTEsImlhdCI6MTc0MzE5NjI1MX0.oX300Lmebaj_Vg-8s-GPuCeRaiTvvOSQG7elakU16LI";
+	private String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlQXV0aG9yaXR5Q2xhaW0iOiJST0xFX0NMSUVOVCxST0xFX0FETUlOIiwic3ViIjoiZW1haWwxQGdtYWlsLmNvbSIsInNlc3Npb25JZCI6MywiZXhwIjoxOTQ1NTY0NDUwLCJpYXQiOjE3NDU0NzgwNTB9.8qj11r3ouInzfw7wH35k6HapE_T2wDXKPJYNr6Fahjg";
 
 	private final CreditService creditService;
 
