@@ -13,11 +13,6 @@ public class InitialAmountBetweenFilter implements BetweenFilter<BigDecimal> {
     private BigDecimal lte;
 
     @Override
-    public String getEntityFieldName() {
-        return "initialAmount";
-    }
-
-    @Override
     public Class<BigDecimal> getComparableClass() {
         return BigDecimal.class;
     }

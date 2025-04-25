@@ -23,8 +23,6 @@ public final class GraphQlUtil {
 
     public final static String GREATER_THEN_OR_EQUAL_FIELD_NAME = "gte";
 
-    public final static String JOIN_KEY_FIELD_NAME = "id";
-
     public static <T> Specification<T> createSpecFromArguments(
             Specification<T> spec,
             Object entityFilter
@@ -47,26 +45,39 @@ public final class GraphQlUtil {
         return spec;
     }
 
-    private static <T, Y> Specification<T> chooseFieldTypeAndCreateSpec(Specification<T> spec, Field field, Y fieldValue) {
+    private static <T, Y> Specification<T> chooseFieldTypeAndCreateSpec(
+            Specification<T> spec,
+            Field field,
+            Y fieldValue
+    ) {
         FilterType filterType = field.getAnnotation(FilterType.class);
         if (filterType != null) {
+            String fieldName = filterType.fieldName();
+            if (fieldName.isEmpty()) {
+                fieldName = field.getName();
+            }
             switch (filterType.type()) {
                 case EQUALS -> {
-                    return createEqualsFilterSpec(spec, field.getName(), fieldValue);
+                    return createEqualsFilterSpec(spec, fieldName, fieldValue);
                 }
                 case BETWEEN -> {
                     if (fieldValue instanceof BetweenFilter betweenFilter) {
-                        return createBetweenFilterSpec(spec, betweenFilter);
+                        return createBetweenFilterSpec(spec, betweenFilter, fieldName);
                     }
                 }
                 case CONTAINS -> {
                     if (fieldValue instanceof Collection<?> collection) {
-                        return addContainsSpec(spec, field.getName(), collection);
+                        return addContainsSpec(spec, filterType.referencedColumnName(), collection);
                     }
                 }
                 case JOIN_ENTITY_ID_CONTAINS -> {
                     if (fieldValue instanceof Collection<?> collection) {
-                        return addJoinEntityByIdSpec(spec, field.getName(), collection);
+                        return addJoinEntityByIdSpec(
+                                spec,
+                                filterType.mappedBy(),
+                                filterType.referencedColumnName(),
+                                collection
+                        );
                     }
                 }
             }
@@ -84,7 +95,8 @@ public final class GraphQlUtil {
 
     private static <T> Specification<T> createBetweenFilterSpec(
             Specification<T> spec,
-            BetweenFilter<?> betweenFilter
+            BetweenFilter<?> betweenFilter,
+            String fieldName
     ) {
         try {
             for (Field field : betweenFilter.getClass().getDeclaredFields()) {
@@ -96,13 +108,13 @@ public final class GraphQlUtil {
                     switch (field.getName()) {
                         case LOWER_THEN_OR_EQUAL_FIELD_NAME -> spec = spec.and(
                                 addLowerThanOrEqualsSpec(
-                                        betweenFilter.getEntityFieldName(),
+                                        fieldName,
                                         (Comparable<Object>) castedValue
                                 )
                         );
                         case GREATER_THEN_OR_EQUAL_FIELD_NAME -> spec = spec.and(
                                 addGraterThanOrEqualsSpec(
-                                        betweenFilter.getEntityFieldName(),
+                                        fieldName,
                                         (Comparable<Object>) castedValue
                                 )
                         );
@@ -133,22 +145,23 @@ public final class GraphQlUtil {
 
     private static <T> Specification<T> addJoinEntityByIdSpec(
             Specification<T> spec,
-            String fieldName,
+            String mappedBy,
+            String referencedColumnName,
             Collection<?> ids)
     {
-        String entityName = fieldName.substring(0, fieldName.length() - 3);
         return spec.and(
                 ((root, query, criteriaBuilder) -> {
-                    Join<Object, Object> credit = root.join(entityName);
-                    return criteriaBuilder.in(credit.get(JOIN_KEY_FIELD_NAME)).value(ids);
+                    Join<Object, Object> credit = root.join(mappedBy);
+                    return criteriaBuilder.in(credit.get(referencedColumnName)).value(ids);
                 })
         );
     }
 
     private static <T> Specification<T> addContainsSpec(Specification<T> spec,
-                                                        String fieldName,
+                                                        String referencedColumnName,
                                                         Collection<?> items)
     {
-        return spec.and((root, query, criteriaBuilder) -> criteriaBuilder.in(root.get(fieldName)).value(items));
+        return spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.in(root.get(referencedColumnName)).value(items));
     }
 }

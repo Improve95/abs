@@ -6,7 +6,5 @@ public interface BetweenFilter<T> {
 
     Comparable<T> getLte();
 
-    String getEntityFieldName();
-
     Class<T> getComparableClass();
 }

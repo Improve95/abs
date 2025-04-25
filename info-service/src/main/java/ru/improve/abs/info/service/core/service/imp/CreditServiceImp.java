@@ -14,7 +14,6 @@ import ru.improve.abs.info.service.core.repository.CreditRepository;
 import ru.improve.abs.info.service.core.service.CreditService;
 import ru.improve.abs.info.service.model.credit.Credit;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static ru.improve.abs.info.service.uitl.GraphQlUtil.createSpecFromArguments;
@@ -36,19 +35,8 @@ public class CreditServiceImp implements CreditService {
         Specification<Credit> creditSpecification = Specification.where(null);
         creditSpecification = createSpecFromArguments(creditSpecification, creditFilter);
 
-        /*return creditRepository.findAll(creditSpecification, page).stream()
+        return creditRepository.findAll(creditSpecification, page).stream()
                 .map(creditMapper::toCreditResponse)
-                .toList();*/
-
-        return List.of(
-                CreditResponse.builder()
-                        .id(1)
-                        .initialAmount(BigDecimal.valueOf(10000))
-                        .build(),
-                CreditResponse.builder()
-                        .id(2)
-                        .initialAmount(BigDecimal.valueOf(20000))
-                        .build()
-        );
+                .toList();
     }
 }

@@ -67,3 +67,20 @@ create table payments (
 
 truncate table credits cascade;
 alter sequence credits_id_seq restart with 1;
+
+insert into credits (id, initial_amount, taking_date, percent, credit_period, month_amount, credit_status, user_id, credit_tariff_id)
+values (1, 1000, '2023-01-01', 15, 36, 100, 'OPEN', 1, 1),
+       (2, 10000, '2025-01-01', 15, 36, 100, 'CLOSE', 1, 1)
+
+truncate table payments;
+insert into payments (id, credit_id, amount, commission_amount, created_at)
+values (1, 1, 100, 10, '2023-01-02'),
+       (2, 1, 110, 10, '2023-02-02'),
+       (3, 1, 120, 10, '2023-03-02'),
+       (4, 1, 130, 10, '2023-04-02'),
+       (5, 1, 140, 10, '2023-05-02'),
+       (6, 2, 100, 10, '2025-01-02'),
+       (7, 2, 110, 10, '2025-02-02'),
+       (8, 2, 120, 10, '2025-03-02'),
+       (9, 2, 130, 10, '2025-04-02'),
+       (10, 2, 140, 10, '2025-05-02')

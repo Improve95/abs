@@ -12,6 +12,10 @@ public class PaymentFilter {
     @FilterType(type = FilterTypeEnum.EQUALS)
     private Long id;
 
-    @FilterType(type = FilterTypeEnum.JOIN_ENTITY_ID_CONTAINS)
+    @FilterType(
+            type = FilterTypeEnum.JOIN_ENTITY_ID_CONTAINS,
+            mappedBy = "credit",
+            referencedColumnName = "id"
+    )
     private Set<Long> creditIds;
 }

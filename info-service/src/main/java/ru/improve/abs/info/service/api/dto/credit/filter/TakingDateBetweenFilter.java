@@ -14,11 +14,6 @@ public class TakingDateBetweenFilter implements BetweenFilter<ChronoLocalDate> {
     private LocalDate gte;
 
     @Override
-    public String getEntityFieldName() {
-        return "takingDate";
-    }
-
-    @Override
     public Class<ChronoLocalDate> getComparableClass() {
         return ChronoLocalDate.class;
     }

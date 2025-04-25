@@ -14,5 +14,5 @@ public interface PaymentService {
 
 //    Map<Long, PaymentResponse> getBatchPayments(Set<Long> creditIds, DataFetchingEnvironment env);
 
-    Map<Long, PaymentResponse> getBatchPayments(Set<Long> creditIds, BatchLoaderEnvironment env);
+    Map<Long, List<PaymentResponse>> getBatchPayments(Set<Long> creditIds, BatchLoaderEnvironment env);
 }

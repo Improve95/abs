@@ -9,5 +9,27 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FilterType {
 
+    /**
+    * тип фильтра, кототрый должен наложиться на поле
+    * */
     FilterTypeEnum type();
+
+    /**
+    * имя поля, можно не заполнять, если имя колонки соответствует имени фильтра
+    * */
+    String fieldName() default "";
+
+    /**
+    * только при JOIN_ENTITY_ID_CONTAINS
+    * имя колонки по которой будет происходить join
+    * смотри документацию @JoinColumn
+    * */
+    String referencedColumnName() default "";
+
+    /**
+    * только при JOIN_ENTITY_ID_CONTAINS
+    * имя поля join сущности в модели, к которой будет приклепляться сущность
+    * смотри документацию @OneToMany
+    * */
+    String mappedBy() default "";
 }

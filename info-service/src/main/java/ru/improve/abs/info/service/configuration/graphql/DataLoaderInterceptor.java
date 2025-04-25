@@ -10,13 +10,16 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import ru.improve.abs.info.service.api.dto.payment.PaymentResponse;
 
+import java.util.List;
+
 import static ru.improve.abs.info.service.uitl.GraphQlUtil.PAYMENT_DATA_LOADER;
 
 @RequiredArgsConstructor
 @Component
 public class DataLoaderInterceptor implements WebGraphQlInterceptor {
 
-    private final DataLoader<Long, PaymentResponse> paymentDataLoader;
+    private final DataLoader<Long, List<PaymentResponse>> paymentDataLoader;
+//    private final BatchLoader<Long, PaymentResponse> paymentDataLoader;
 
     @Override
     public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, WebGraphQlInterceptor.Chain chain) {

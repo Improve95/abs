@@ -45,7 +45,7 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Map<Long, PaymentResponse> getBatchPayments(
+    public Map<Long, List<PaymentResponse>> getBatchPayments(
             Set<Long> creditIds,
             BatchLoaderEnvironment batchLoaderEnvironment
     ) {
@@ -58,9 +58,8 @@ public class PaymentServiceImp implements PaymentService {
         paymentFilter.setCreditIds(creditIds);
         paymentRequest.setPaymentFilter(paymentFilter);
         return getPayments(paymentRequest).stream()
-                .collect(Collectors.toMap(
-                        PaymentResponse::getCreditId,
-                        paymentResponse -> paymentResponse
+                .collect(Collectors.groupingBy(
+                        PaymentResponse::getCreditId
                 ));
     }
 }

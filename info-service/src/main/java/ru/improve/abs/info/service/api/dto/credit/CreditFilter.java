@@ -15,15 +15,24 @@ public class CreditFilter {
     @FilterType(type = FilterTypeEnum.EQUALS)
     private Long id;
 
-    @FilterType(type = FilterTypeEnum.BETWEEN)
+    @FilterType(
+            type = FilterTypeEnum.BETWEEN,
+            fieldName = "initialAmount"
+    )
     private InitialAmountBetweenFilter initialAmountFilter;
 
-    @FilterType(type = FilterTypeEnum.BETWEEN)
+    @FilterType(
+            type = FilterTypeEnum.BETWEEN,
+            fieldName = "takingDate"
+    )
     private TakingDateBetweenFilter takingDateFilter;
 
     @FilterType(type = FilterTypeEnum.EQUALS)
     private CreditStatus creditStatus;
 
-    @FilterType(type = FilterTypeEnum.CONTAINS)
+    @FilterType(
+            type = FilterTypeEnum.CONTAINS,
+            referencedColumnName = "userId"
+    )
     private List<Integer> userIds;
 }
