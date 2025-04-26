@@ -36,12 +36,10 @@ public class AuthServiceImp implements AuthService {
     public boolean setAuthentication(HttpServletRequest request, HttpServletResponse response) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication auth = securityContext.getAuthentication();
-        System.out.println("check request auth " + request.getMethod() + " " + request.getRequestURL().toString());
         try {
             if (!(auth instanceof JwtAuthenticationToken authToken)) {
-                System.out.println("request not auth " + request.getMethod() + " " + request.getRequestURL().toString());
-//            log.info("Not authenticated request: {}: {}", request.getMethod(), request.getRequestURL());
-//                securityContext.setAuthentication(null);
+                log.info("Not authenticated request: {}: {}", request.getMethod(), request.getRequestURL());
+                securityContext.setAuthentication(null);
                 return true;
             }
             Jwt jwtToken = tokenService.parseJwt(authToken.getToken().getTokenValue());

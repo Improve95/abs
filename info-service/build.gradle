@@ -36,7 +36,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//    implementation 'org.springframework.boot:spring-boot-starter-graphql'
+    implementation 'org.springframework.boot:spring-boot-starter-graphql'
 
 //    implementation 'com.graphql-java:java-dataloader:4.0.0'
 //    implementation 'com.graphql-java:graphql-java:20.9'
@@ -61,7 +61,7 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator-annotation-processor:8.0.1.Final'
 
     runtimeOnly 'org.postgresql:postgresql:42.7.5'
-//    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.9.5'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.9.5'
 
     implementation 'org.mapstruct:mapstruct:1.6.0'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0'

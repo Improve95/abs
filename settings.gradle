@@ -2,5 +2,5 @@ rootProject.name = 'abs-service'
 include 'auth-service'
 //include 'token-exchange-service'
 include 'info-service'
-include 'manage-service'
+//include 'manage-service'
 

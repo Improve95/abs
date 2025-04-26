@@ -1,11 +1,21 @@
 package ru.improve.abs.info.service.configuration.graphql;
 
+import org.dataloader.DataLoader;
+import org.dataloader.DataLoaderFactory;
+import org.dataloader.DataLoaderOptions;
+import org.dataloader.MappedBatchLoaderWithContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.improve.abs.info.service.api.dto.payment.PaymentResponse;
+import ru.improve.abs.info.service.core.service.PaymentService;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Configuration
 public class DataLoaderConfig {
 
-    /*@Bean
+    @Bean
     public DataLoader<Long, List<PaymentResponse>> paymentDataLoader(PaymentService paymentService) {
         DataLoaderOptions dataLoaderOptions = DataLoaderOptions.newOptions()
                 .setCachingEnabled(false);
@@ -19,5 +29,5 @@ public class DataLoaderConfig {
         return (creditIds, batchLoaderEnvironment) -> CompletableFuture.supplyAsync(
                 () -> paymentService.getBatchPayments(creditIds, batchLoaderEnvironment)
         );
-    }*/
+    }
 }

@@ -1,6 +1,7 @@
 package ru.improve.abs.info.service.core.service.imp;
 
 import lombok.RequiredArgsConstructor;
+import org.dataloader.BatchLoaderEnvironment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -45,12 +46,10 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public Map<Long, List<PaymentResponse>> getBatchPayments(
-            Set<Long> creditIds/*,
-            BatchLoaderEnvironment batchLoaderEnvironment*/
+            Set<Long> creditIds,
+            BatchLoaderEnvironment batchLoaderEnvironment
     ) {
-//        PaymentRequest paymentRequest = (PaymentRequest) batchLoaderEnvironment.getKeyContextsList().getFirst();
-        PaymentRequest paymentRequest = PaymentRequest.builder().build();
-
+        PaymentRequest paymentRequest = (PaymentRequest) batchLoaderEnvironment.getKeyContextsList().getFirst();
         PaymentFilter paymentFilter = paymentRequest.getPaymentFilter();
         if (paymentFilter == null) {
             paymentFilter = new PaymentFilter();

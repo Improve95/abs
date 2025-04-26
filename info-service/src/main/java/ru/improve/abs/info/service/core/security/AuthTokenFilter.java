@@ -5,14 +5,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.improve.abs.info.service.core.security.service.AuthService;
 
 import java.io.IOException;
 
 @RequiredArgsConstructor
-@Service
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private final AuthService authService;

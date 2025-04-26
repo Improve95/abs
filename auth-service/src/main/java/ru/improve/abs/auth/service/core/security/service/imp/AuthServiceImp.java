@@ -77,10 +77,8 @@ public class AuthServiceImp implements AuthService {
     public boolean setAuthentication(HttpServletRequest request, HttpServletResponse response) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication auth = securityContext.getAuthentication();
-        System.out.println("check request auth " + request.getMethod() + " " + request.getRequestURL().toString());
         if (!(auth instanceof JwtAuthenticationToken)) {
-            System.out.println("request not auth " + request.getMethod() + " " + request.getRequestURL().toString());
-//            log.info("Not authenticated request: {}: {}", request.getMethod(), request.getRequestURL());
+            log.info("Not authenticated request: {}: {}", request.getMethod(), request.getRequestURL());
             return true;
         }
 

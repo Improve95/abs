@@ -26,4 +26,4 @@ security:
 
 logging:
   level:
-    org.springframework.security.web.FilterChainProxy: INFO
+    org.springframework.security.web.FilterChainProxy: ERROR
