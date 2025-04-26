@@ -21,6 +21,7 @@ import static ru.improve.abs.auth.service.api.exception.ErrorCode.ACCESS_DENIED;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.ALREADY_EXIST;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
+import static ru.improve.abs.auth.service.api.exception.ErrorCode.INVALID_JWT_TOKEN;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.NOT_FOUND;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.SESSION_IS_OVER;
 import static ru.improve.abs.auth.service.api.exception.ErrorCode.UNAUTHORIZED;
@@ -28,6 +29,7 @@ import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_ACCESS_DENIED;
 import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_ALREADY_EXIST;
 import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_ILLEGAL_DTO_VALUE;
 import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_INTERNAL_SERVER_ERROR;
+import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_INVALID_JWT;
 import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_NOT_FOUND;
 import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_SESSION_IS_OVER;
 import static ru.improve.abs.auth.service.util.MessageKeys.TITLE_UNAUTHORIZED;
@@ -44,6 +46,7 @@ public class ExceptionResolver {
             NOT_FOUND, TITLE_NOT_FOUND,
             UNAUTHORIZED, TITLE_UNAUTHORIZED,
             SESSION_IS_OVER, TITLE_SESSION_IS_OVER,
+            INVALID_JWT_TOKEN, TITLE_INVALID_JWT,
             ACCESS_DENIED, TITLE_ACCESS_DENIED
     );
 
@@ -54,7 +57,8 @@ public class ExceptionResolver {
             NOT_FOUND, HttpStatus.NOT_FOUND,
             UNAUTHORIZED, HttpStatus.UNAUTHORIZED,
             SESSION_IS_OVER, HttpStatus.UNAUTHORIZED,
-            ACCESS_DENIED, HttpStatus.UNAUTHORIZED
+            ACCESS_DENIED, HttpStatus.UNAUTHORIZED,
+            INVALID_JWT_TOKEN, HttpStatus.UNAUTHORIZED
     );
 
     private final MessageSource messageSource;

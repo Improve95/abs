@@ -17,9 +17,10 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException authException
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException
     ) {
         ServiceException serviceException = new ServiceException(INVALID_JWT_TOKEN, authException);
         handlerExceptionResolver.resolveException(request, response, null, serviceException);

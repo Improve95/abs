@@ -25,13 +25,13 @@ public class CoderConfig {
      @Primary
      @Bean(name = MICROSERVICE_CODER + JWT_DECODER)
      public JwtDecoder microserviceJwtDecoder(TokenConfig tokenConfig) {
-          return NimbusJwtDecoder.withSecretKey(clientSecretKey(tokenConfig.getClientSecret())).build();
+          return NimbusJwtDecoder.withSecretKey(clientSecretKey(tokenConfig.getMicroserviceSecret())).build();
      }
 
      @Primary
      @Bean(name = MICROSERVICE_CODER + JWT_ENCODER)
      public JwtEncoder microserviceJwtEncoder(TokenConfig tokenConfig) {
-          return new NimbusJwtEncoder(new ImmutableSecret<>(clientSecretKey(tokenConfig.getClientSecret())));
+          return new NimbusJwtEncoder(new ImmutableSecret<>(clientSecretKey(tokenConfig.getMicroserviceSecret())));
      }
 
      @Bean(name = CLIENT_CODER + JWT_DECODER)

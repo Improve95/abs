@@ -23,7 +23,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        if (authService.setAuthentication(request)) {
+        if (authService.setAuthentication(request, response)) {
             filterChain.doFilter(request, response);
         }
     }

@@ -1,6 +1,5 @@
 package ru.improve.abs.info.service.core.service;
 
-import org.dataloader.BatchLoaderEnvironment;
 import ru.improve.abs.info.service.api.dto.payment.PaymentRequest;
 import ru.improve.abs.info.service.api.dto.payment.PaymentResponse;
 
@@ -14,5 +13,5 @@ public interface PaymentService {
 
 //    Map<Long, PaymentResponse> getBatchPayments(Set<Long> creditIds, DataFetchingEnvironment env);
 
-    Map<Long, List<PaymentResponse>> getBatchPayments(Set<Long> creditIds, BatchLoaderEnvironment env);
+    Map<Long, List<PaymentResponse>> getBatchPayments(Set<Long> creditIds/*, BatchLoaderEnvironment env*/);
 }

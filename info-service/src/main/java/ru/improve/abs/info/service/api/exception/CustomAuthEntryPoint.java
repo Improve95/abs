@@ -5,13 +5,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import static ru.improve.abs.info.service.api.exception.ErrorCode.UNAUTHORIZED;
+import static ru.improve.abs.info.service.api.exception.ErrorCode.INVALID_JWT_TOKEN;
 
 @RequiredArgsConstructor
-@Service
+@Component
 public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
 
     private final HandlerExceptionResolver handlerExceptionResolver;
@@ -22,7 +22,7 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException authException
     ) {
-        ServiceException serviceException = new ServiceException(UNAUTHORIZED, authException);
+        ServiceException serviceException = new ServiceException(INVALID_JWT_TOKEN, authException);
         handlerExceptionResolver.resolveException(request, response, null, serviceException);
     }
 }

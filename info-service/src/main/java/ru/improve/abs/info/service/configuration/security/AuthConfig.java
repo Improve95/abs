@@ -2,7 +2,6 @@ package ru.improve.abs.info.service.configuration.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -33,10 +32,9 @@ public class AuthConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/graphiql" + "/**").permitAll()
-                                .anyRequest().permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/graphiql").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/graphiql").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(conf -> conf
                         .jwt(Customizer.withDefaults())
