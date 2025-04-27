@@ -1,5 +1,5 @@
 server:
-  port: ${INFO_SERVICE_PORT}
+  port: ${MANAGE_SERVICE_PORT}
 
 spring:
   application:
@@ -8,7 +8,7 @@ spring:
     import: optional:file:.env[.properties]
   docker:
     compose:
-      enabled: true
+      enabled: false
       file: manage-docker-compose.yml
   cache:
     cache-names:
@@ -20,9 +20,9 @@ spring:
         format_sql: true
 
   datasource:
-    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
+    url: jdbc:postgresql://${CREDIT_PG_HOST}:${CREDIT_PG_PORT}/${CREDIT_PG_DATABASE}
+    username: ${CREDIT_PG_USER}
+    password: ${CREDIT_PG_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
 credit:

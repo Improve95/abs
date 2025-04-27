@@ -1,0 +1,106 @@
+type Query {
+    credits(page: Page!, filter: CreditFilter): [Credit]
+}
+
+type Credit {
+    id: ID
+    initialAmount: Float
+    takingDate: String
+    percent: Int
+    creditPeriod: Int
+    monthAmount: Float
+    creditStatus: CreditStatus
+    userId: ID
+    creditTariff: CreditTariff
+    payments(page: Page!, filter: PaymentFilter): [Payment]
+    balances(page: Page!): [Balance]
+    penalties(page: Page!): [Penalty]
+}
+
+enum CreditStatus {
+    CREATE
+    OPEN
+    CLOSE
+}
+
+input CreditFilter {
+    id: ID
+    status: CreditStatus
+    initialAmountFilter: InitialAmountFilter
+    takingDateFilter: TakingDateFilter
+    userIds: [ID!]
+}
+
+input InitialAmountFilter {
+    gte: Float
+    lte: Float
+}
+
+input TakingDateFilter {
+    gte: String
+    lte: String
+}
+
+type CreditTariff {
+    id: ID
+    type: String
+    upToAmount: Float
+    upToCreditDuration: Int
+    creditPercent: Int
+    creditRequests: [CreditRequest]
+    credits: [Credit]
+}
+
+type CreditRequest {
+    id: ID
+    creditTariff: CreditTariff
+    creditAmount: Float
+    creditDuration: String
+    userId: ID
+    createdAt: String
+}
+
+type Payment {
+    id: ID
+    amount: Float
+    commissionAmount: Float
+    createdAt: String
+    credit: Credit
+}
+
+input PaymentFilter {
+    id: ID
+    creditId: ID
+}
+
+type Balance {
+    id: ID
+    credit: Credit
+    remainingDebt: Float
+    accruedByPercent: Float
+    createdAt: String
+}
+
+type Penalty {
+    id: ID
+    credit: Credit
+    type: PenaltyType
+    amount: Float
+    status: PenaltyStatus
+}
+
+enum PenaltyType {
+    MAIN_DEBT_REMAIN
+    FIX
+    PENNY
+}
+
+enum PenaltyStatus {
+    PAID
+    NOT_PAID
+}
+
+input Page {
+    pageNumber: Int!,
+    pageSize: Int!
+}
