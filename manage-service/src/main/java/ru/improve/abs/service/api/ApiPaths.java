@@ -1,7 +1,5 @@
 package ru.improve.abs.service.api;
 
-import lombok.experimental.UtilityClass;
-
 public final class ApiPaths {
 
     public static final String USERS = "/users";
@@ -13,6 +11,12 @@ public final class ApiPaths {
     public static final String LOGIN = "/login";
 
     public static final String LOGOUT = "/logout";
+
+    public static final String PASSWORD = "/password";
+
+    public static final String RESET_LINK = "/reset_link";
+
+    public static final String RESET = "/reset";
 
     public static final String ROLES = "/roles";
 

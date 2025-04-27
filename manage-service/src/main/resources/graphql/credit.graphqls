@@ -47,8 +47,6 @@ type CreditTariff {
     upToAmount: Float
     upToCreditDuration: Int
     creditPercent: Int
-    creditRequests: [CreditRequest]
-    credits: [Credit]
 }
 
 type CreditRequest {

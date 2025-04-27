@@ -60,4 +60,38 @@ public class GraphQlController {
                         .build()
         );
     }
+
+    @SchemaMapping(field = "balances", typeName = "Credit")
+    public CompletableFuture<List<PaymentResponse>> balances(
+            CreditResponse creditResponse,
+            @Argument PageableDto page,
+            DataFetchingEnvironment env
+    ) {
+//        DataLoader<Long, List<PaymentResponse>> dataLoader = env.getDataLoader(PAYMENT_DATA_LOADER);
+        /*return dataLoader.load(
+                creditResponse.getId(),
+                PaymentRequest.builder()
+                        .pageableDto(page)
+                        .paymentFilter(filter)
+                        .build()
+        );*/
+        return null;
+    }
+
+    @SchemaMapping(field = "penalties", typeName = "Credit")
+    public CompletableFuture<List<PaymentResponse>> penalties(
+            CreditResponse creditResponse,
+            @Argument PageableDto page,
+            DataFetchingEnvironment env
+    ) {
+//        DataLoader<Long, List<PaymentResponse>> dataLoader = env.getDataLoader(PAYMENT_DATA_LOADER);
+        /*return dataLoader.load(
+                creditResponse.getId(),
+                PaymentRequest.builder()
+                        .pageableDto(page)
+                        .paymentFilter(filter)
+                        .build()
+        );*/
+        return null;
+    }
 }

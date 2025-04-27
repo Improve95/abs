@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 import ru.improve.abs.service.api.dto.auth.LoginRequest;
 import ru.improve.abs.service.api.dto.auth.LoginResponse;
+import ru.improve.abs.service.api.dto.auth.ResetPasswordRequest;
 import ru.improve.abs.service.api.dto.user.SignInRequest;
 import ru.improve.abs.service.api.dto.user.SignInResponse;
 import ru.improve.abs.service.api.exception.ServiceException;
@@ -156,5 +157,17 @@ public class AuthServiceImp implements AuthService {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ServiceException(NOT_FOUND, "session", "id"));
         session.setEnable(false);
+    }
+
+    @Transactional
+    @Override
+    public void sendLinkForResetPassword(ResetPasswordRequest resetPasswordRequest) {
+
+    }
+
+    @Transactional
+    @Override
+    public void resetPassword(String token) {
+
     }
 }

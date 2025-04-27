@@ -1,4 +1,4 @@
-package ru.improve.abs.service.configuration.security;
+package ru.improve.abs.service.configuration.security.aclConfig;
 
 //@RequiredArgsConstructor
 //@Configuration

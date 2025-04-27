@@ -39,6 +39,13 @@ public class TokenServiceImp implements TokenService {
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims));
     }
 
+    /*@Override
+    public Jwt generateToken(JwtClaimsSet claims, String encoderType) {
+        JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+//        JwtEncoder jwtEncoder = jwtEncoderMap.get(encoderType + JWT_ENCODER);
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims));
+    }*/
+
     @Override
     public long getSessionId(Jwt jwt) {
         return jwt.getClaim(SecurityUtil.SESSION_ID_CLAIM);

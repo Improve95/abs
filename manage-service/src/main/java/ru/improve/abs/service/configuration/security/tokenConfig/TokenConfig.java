@@ -1,4 +1,4 @@
-package ru.improve.abs.service.configuration.security;
+package ru.improve.abs.service.configuration.security.tokenConfig;
 
 import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,4 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class TokenConfig {
 
     private String secret;
+
+    private String resetPasswordSecret;
 }

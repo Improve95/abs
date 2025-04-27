@@ -1,4 +1,4 @@
-package ru.improve.abs.service.configuration.security;
+package ru.improve.abs.service.configuration.security.aclConfig;
 
 import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
