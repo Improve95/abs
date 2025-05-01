@@ -13,6 +13,9 @@ import ru.improve.abs.service.model.CreditRequest;
 import ru.improve.abs.service.model.CreditTariff;
 import ru.improve.abs.service.model.credit.Credit;
 
+import static ru.improve.abs.service.core.mapper.MapperUtil.GET_CREDIT_TARIFF_RESPONSE_FUNC_NAME;
+import static ru.improve.abs.service.core.mapper.MapperUtil.MAPPER_UTIL_NAME;
+
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedSourcePolicy = ReportingPolicy.IGNORE,
@@ -39,8 +42,9 @@ public interface CreditMapper {
     Credit toCredit(PostCreditRequest creditRequest);
 
     @Mapping(
-            target = "creditTariffId",
-            expression = "java(credit.getCreditTariff().getId())"
+            target = "creditTariff",
+            qualifiedByName = { MAPPER_UTIL_NAME, GET_CREDIT_TARIFF_RESPONSE_FUNC_NAME },
+            source = "credit"
     )
     @Mapping(
             target = "userId",

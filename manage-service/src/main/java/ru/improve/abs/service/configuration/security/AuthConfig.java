@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
-import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +29,7 @@ import static ru.improve.abs.service.api.ApiPaths.AUTH;
 import static ru.improve.abs.service.api.ApiPaths.LOGIN;
 import static ru.improve.abs.service.api.ApiPaths.SIGN_IN;
 import static ru.improve.abs.service.util.SecurityUtil.ADMIN_ROLE;
+import static ru.improve.abs.service.util.SecurityUtil.CLIENT_ROLE;
 import static ru.improve.abs.service.util.SecurityUtil.OPERATOR_ROLE;
 
 @RequiredArgsConstructor
@@ -60,15 +59,17 @@ public class AuthConfig {
 
     @Bean
     public RoleHierarchy roleHierarchy() {
-        return RoleHierarchyImpl.fromHierarchy(ADMIN_ROLE + ">" + OPERATOR_ROLE);
+        return RoleHierarchyImpl.fromHierarchy(
+                ADMIN_ROLE + " > " + OPERATOR_ROLE + " > " + CLIENT_ROLE
+        );
     }
 
-    @Bean
+    /*@Bean
     public MethodSecurityExpressionHandler methodSecurityExpressionHandler(RoleHierarchy roleHierarchy) {
         DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
         expressionHandler.setRoleHierarchy(roleHierarchy);
         return expressionHandler;
-    }
+    }*/
 
     @Bean
     public SecurityFilterChain securityFilterChain(

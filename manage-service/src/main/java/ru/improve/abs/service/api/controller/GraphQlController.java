@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static ru.improve.abs.service.util.GraphQlUtil.PAYMENT_DATA_LOADER;
-
-@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 @RequiredArgsConstructor
 @Controller
 public class GraphQlController {
@@ -32,7 +30,9 @@ public class GraphQlController {
 
     private final PaymentService paymentService;
 
+    @PreAuthorize("hasAnyRole(ROLE_CLIENT)")
     @QueryMapping
+
     public List<CreditResponse> credits(
             @Argument PageableDto page,
             @Argument CreditFilter filter
