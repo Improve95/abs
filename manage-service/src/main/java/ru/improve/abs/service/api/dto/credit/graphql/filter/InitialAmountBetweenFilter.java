@@ -1,4 +1,4 @@
-package ru.improve.abs.service.api.dto.credit.filter;
+package ru.improve.abs.service.api.dto.credit.graphql.filter;
 
 import lombok.Data;
 import ru.improve.abs.service.api.dto.graphql.BetweenFilter;

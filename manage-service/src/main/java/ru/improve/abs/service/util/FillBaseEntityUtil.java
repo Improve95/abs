@@ -65,7 +65,7 @@ public class FillBaseEntityUtil {
     }
 
 	@Transactional
-	private boolean cleanBalance() {
+	protected boolean cleanBalance() {
 		if (balanceRepository.count() > 0) {
 			balanceRepository.deleteAll();
 			penaltyRepository.deleteAll();

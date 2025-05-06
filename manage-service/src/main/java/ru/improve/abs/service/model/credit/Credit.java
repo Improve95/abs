@@ -47,9 +47,6 @@ public class Credit {
 
     private int percent;
 
-    @Column(name = "credit_period")
-    private int creditPeriod;
-
     @Column(name = "month_amount")
     private BigDecimal monthAmount;
 

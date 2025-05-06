@@ -1,16 +1,19 @@
 package ru.improve.abs.service.core.service.imp;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ru.improve.abs.service.api.dto.credit.CreditFilter;
 import ru.improve.abs.service.api.dto.credit.CreditRequestResponse;
 import ru.improve.abs.service.api.dto.credit.CreditResponse;
+import ru.improve.abs.service.api.dto.credit.GetLoansAmountOutputResponse;
 import ru.improve.abs.service.api.dto.credit.PostCreditRequest;
 import ru.improve.abs.service.api.dto.credit.PostCreditRequestRequest;
+import ru.improve.abs.service.api.dto.credit.graphql.CreditFilter;
 import ru.improve.abs.service.api.dto.graphql.PageableDto;
 import ru.improve.abs.service.api.exception.ServiceException;
 import ru.improve.abs.service.core.mapper.CreditMapper;
@@ -25,10 +28,12 @@ import ru.improve.abs.service.model.CreditTariff;
 import ru.improve.abs.service.model.User;
 import ru.improve.abs.service.model.credit.Credit;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.improve.abs.service.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
 import static ru.improve.abs.service.api.exception.ErrorCode.NOT_FOUND;
+import static ru.improve.abs.service.core.repository.request.CriteriaApiRequests.getLoansAmountOutputReportRequest;
 import static ru.improve.abs.service.util.GraphQlUtil.createSpecFromArguments;
 import static ru.improve.abs.service.util.MessageKeys.ILLEGAL_CREDIT_REQUEST_DTO;
 
@@ -48,13 +53,7 @@ public class CreditServiceImp implements CreditService {
 
     private final CreditMapper creditMapper;
 
-    /*@Transactional
-    @Override
-    public List<CreditTariffResponse> getAllCreditTariffs() {
-        return creditTariffRepository.findAll().stream()
-                .map(creditMapper::toCreditTariffResponse)
-                .toList();
-    }*/
+    private final EntityManager em;
 
     @Override
     public List<CreditResponse> getCredits(ru.improve.abs.service.api.dto.credit.CreditRequest creditRequest) {
@@ -86,32 +85,15 @@ public class CreditServiceImp implements CreditService {
         creditRequest.setUser(user);
 
         creditRequest = creditRequestRepository.save(creditRequest);
-
         return creditMapper.toCreditRequestResponse(creditRequest);
     }
-/*
-    @Transactional
-    @Override
-    public List<CreditResponse> getAllCredits(int pageNumber, int pageSize) {
-        return creditRepository.findAll(PageRequest.of(pageNumber, pageSize)).stream()
-                .map(creditMapper::toCreditResponse)
-                .toList();
-    }
 
     @Transactional
     @Override
-    public CreditResponse getCreditById(long creditId) {
-        return creditMapper.toCreditResponse(findCreditById(creditId));
+    public GetLoansAmountOutputResponse getLoansAmountOutputReport(LocalDate from, LocalDate to) {
+        CriteriaQuery<GetLoansAmountOutputResponse> request = getLoansAmountOutputReportRequest(em, from, to);
+        return em.createQuery(request).getSingleResult();
     }
-
-    @Transactional
-    @Override
-    public List<CreditResponse> getAllCreditsByUserId(int userId, int pageNumber, int pageSize) {
-        User user = userService.findUserById(userId);
-        return creditRepository.findAllByUser(user, PageRequest.of(pageNumber, pageSize)).stream()
-                .map(creditMapper::toCreditResponse)
-                .toList();
-    }*/
 
     @Transactional
     @Override
@@ -129,34 +111,6 @@ public class CreditServiceImp implements CreditService {
 
         return creditMapper.toCreditResponse(credit);
     }
-
-    /*@Transactional
-    @Override
-    public CreditResponse takeCreatedCredit(long creditId) {
-        Credit credit = creditRepository.findCreditByIdAndAndCreditStatus(creditId, CreditStatus.CREATE)
-                .orElseThrow(() -> new ServiceException(NOT_FOUND, "credit", "id and open status"));
-
-        User user = credit.getUser();
-        if (creditRepository.countCreditByUserAndCreditStatus(user, CreditStatus.OPEN) >= 1) {
-            throw new ServiceException(ACCESS_DENIED, "you already have credit");
-        }
-        if (user.getId() != userService.getUserFromAuthentication().getId()) {
-            throw new ServiceException(ACCESS_DENIED, "credit");
-        }
-        credit.setTakingDate(LocalDate.now());
-        credit.setCreditStatus(CreditStatus.OPEN);
-        balanceService.createBalance(PostBalanceRequest.builder()
-                .credit(credit)
-                .remainingDebt(credit.getInitialAmount())
-                .remainingMonthDebt(credit.getMonthAmount())
-                .accruedByPercent(balanceService.calculateDailyAccruedByPercentAmount(
-                        credit.getInitialAmount(),
-                        credit.getPercent()
-                ))
-                .build()
-        );
-        return creditMapper.toCreditResponse(credit);
-    }*/
 
     @Transactional
     public CreditTariff findCreditTariffById(int id) {

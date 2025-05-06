@@ -30,6 +30,10 @@ public final class ApiPaths {
 
     public static final String CREDITS = "/credits";
 
+    public static final String REPORT = "/report";
+
+    public static final String LOANS_AMOUNT = "/loans_amount";
+
     public static final String TAKE = "/take";
 
     public static final String REQUEST = "/requests";

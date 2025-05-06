@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
-import ru.improve.abs.service.util.FillBaseEntityUtil;
 
 @EnableCaching
 @ConfigurationPropertiesScan
@@ -14,8 +13,7 @@ public class ManageServiceApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(ManageServiceApplication.class, args);
-
-		FillBaseEntityUtil fillBaseEntityUtil = (FillBaseEntityUtil) context.getBean("fillBaseEntityUtil");
-		fillBaseEntityUtil.fillBaseEntity();
+		/*FillBaseEntityUtil fillBaseEntityUtil = (FillBaseEntityUtil) context.getBean("fillBaseEntityUtil");
+		fillBaseEntityUtil.fillBaseEntity();*/
 	}
 }

@@ -13,6 +13,5 @@ import ru.improve.abs.service.model.Role;
 )
 public interface RoleMapper {
 
-
     RoleResponse toRoleResponse(Role role);
 }

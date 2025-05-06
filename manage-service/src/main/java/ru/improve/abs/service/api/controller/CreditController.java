@@ -2,19 +2,28 @@ package ru.improve.abs.service.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.improve.abs.service.api.controller.spec.CreditControllerSpec;
 import ru.improve.abs.service.api.dto.credit.CreditRequestResponse;
 import ru.improve.abs.service.api.dto.credit.CreditResponse;
+import ru.improve.abs.service.api.dto.credit.GetLoansAmountOutputResponse;
 import ru.improve.abs.service.api.dto.credit.PostCreditRequest;
 import ru.improve.abs.service.api.dto.credit.PostCreditRequestRequest;
 import ru.improve.abs.service.core.service.CreditService;
 
+import java.time.LocalDate;
+
 import static ru.improve.abs.service.api.ApiPaths.CREDITS;
+import static ru.improve.abs.service.api.ApiPaths.LOANS_AMOUNT;
+import static ru.improve.abs.service.api.ApiPaths.REPORT;
 import static ru.improve.abs.service.api.ApiPaths.REQUEST;
 
 @RequiredArgsConstructor
@@ -24,34 +33,15 @@ public class CreditController implements CreditControllerSpec {
 
     private final CreditService creditService;
 
-    /*@GetMapping(TARIFFS)
-    public ResponseEntity<List<CreditTariffResponse>> getAllCreditTariffs() {
-        List<CreditTariffResponse> creditTariffResponses = creditService.getAllCreditTariffs();
-        return ResponseEntity.ok(creditTariffResponses);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(REPORT + LOANS_AMOUNT)
+    public ResponseEntity<GetLoansAmountOutputResponse> getLoansAmountOutputReport(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ) {
+        GetLoansAmountOutputResponse getLoansAmountOutputResponse = creditService.getLoansAmountOutputReport(from, to);
+        return ResponseEntity.ok(getLoansAmountOutputResponse);
     }
-
-    @GetMapping(ALL)
-    public ResponseEntity<List<CreditResponse>> getAllCredits(
-            @RequestParam(name = PAGE_NUMBER) @Valid int pageNumber,
-            @RequestParam(name = PAGE_SIZE) @Valid int pageSize) {
-        List<CreditResponse> creditResponses = creditService.getAllCredits(pageNumber, pageSize);
-        return ResponseEntity.ok(creditResponses);
-    }
-
-    @GetMapping(ID)
-    public ResponseEntity<CreditResponse> getCreditById(@PathVariable @Valid @Positive long id) {
-        CreditResponse creditResponse = creditService.getCreditById(id);
-        return ResponseEntity.ok(creditResponse);
-    }
-
-    @GetMapping(USERS + ID)
-    public ResponseEntity<List<CreditResponse>> getAllCreditsByUserId(
-            @PathVariable @Valid @Positive int id,
-            @RequestParam(name = PAGE_NUMBER) @Valid int pageNumber,
-            @RequestParam(name = PAGE_SIZE) @Valid int pageSize) {
-        List<CreditResponse> creditResponses = creditService.getAllCreditsByUserId(id, pageNumber, pageSize);
-        return ResponseEntity.ok(creditResponses);
-    }*/
 
     @PostMapping(REQUEST)
     public ResponseEntity<CreditRequestResponse> createCreditRequest(
@@ -66,10 +56,4 @@ public class CreditController implements CreditControllerSpec {
         CreditResponse creditResponse = creditService.createCredit(creditRequest);
         return ResponseEntity.ok(creditResponse);
     }
-
-    /*@PostMapping(TAKE + PATH_CREDIT_ID)
-    public ResponseEntity<CreditResponse> takeCreatedCredit(@PathVariable @Valid @Positive int creditId) {
-        CreditResponse creditResponse = creditService.takeCreatedCredit(creditId);
-        return ResponseEntity.ok(creditResponse);
-    }*/
 }

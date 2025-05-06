@@ -1,8 +1,8 @@
-package ru.improve.abs.service.api.dto.credit;
+package ru.improve.abs.service.api.dto.credit.graphql;
 
 import lombok.Data;
-import ru.improve.abs.service.api.dto.credit.filter.InitialAmountBetweenFilter;
-import ru.improve.abs.service.api.dto.credit.filter.TakingDateBetweenFilter;
+import ru.improve.abs.service.api.dto.credit.graphql.filter.InitialAmountBetweenFilter;
+import ru.improve.abs.service.api.dto.credit.graphql.filter.TakingDateBetweenFilter;
 import ru.improve.abs.service.api.dto.graphql.FilterType;
 import ru.improve.abs.service.api.dto.graphql.FilterTypeEnum;
 import ru.improve.abs.service.model.credit.CreditStatus;

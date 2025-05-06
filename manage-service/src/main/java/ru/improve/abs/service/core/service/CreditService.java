@@ -3,11 +3,13 @@ package ru.improve.abs.service.core.service;
 import ru.improve.abs.service.api.dto.credit.CreditRequest;
 import ru.improve.abs.service.api.dto.credit.CreditRequestResponse;
 import ru.improve.abs.service.api.dto.credit.CreditResponse;
+import ru.improve.abs.service.api.dto.credit.GetLoansAmountOutputResponse;
 import ru.improve.abs.service.api.dto.credit.PostCreditRequest;
 import ru.improve.abs.service.api.dto.credit.PostCreditRequestRequest;
 import ru.improve.abs.service.model.CreditTariff;
 import ru.improve.abs.service.model.credit.Credit;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CreditService {
@@ -23,6 +25,8 @@ public interface CreditService {
     CreditResponse getCreditById(long creditId);
 
     List<CreditResponse> getAllCreditsByUserId(int userId, int pageNumber, int pageSize);*/
+
+    GetLoansAmountOutputResponse getLoansAmountOutputReport(LocalDate from, LocalDate to);
 
     CreditResponse createCredit(PostCreditRequest creditRequest);
 

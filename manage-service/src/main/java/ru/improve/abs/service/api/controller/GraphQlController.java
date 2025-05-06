@@ -8,7 +8,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import ru.improve.abs.service.api.dto.credit.CreditFilter;
+import ru.improve.abs.service.api.dto.credit.graphql.CreditFilter;
 import ru.improve.abs.service.api.dto.credit.CreditRequest;
 import ru.improve.abs.service.api.dto.credit.CreditResponse;
 import ru.improve.abs.service.api.dto.graphql.PageableDto;
@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static ru.improve.abs.service.util.GraphQlUtil.PAYMENT_DATA_LOADER;
+
+@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
 @RequiredArgsConstructor
 @Controller
 public class GraphQlController {
@@ -30,9 +32,7 @@ public class GraphQlController {
 
     private final PaymentService paymentService;
 
-    @PreAuthorize("hasAnyRole(ROLE_CLIENT)")
     @QueryMapping
-
     public List<CreditResponse> credits(
             @Argument PageableDto page,
             @Argument CreditFilter filter
