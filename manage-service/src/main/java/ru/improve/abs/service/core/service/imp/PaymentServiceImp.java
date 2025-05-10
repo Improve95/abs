@@ -1,5 +1,6 @@
 package ru.improve.abs.service.core.service.imp;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.dataloader.BatchLoaderEnvironment;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.improve.abs.service.api.dto.graphql.PageableDto;
+import ru.improve.abs.service.api.dto.payment.GetTotalPaymentsResponse;
 import ru.improve.abs.service.api.dto.payment.PaymentFilter;
 import ru.improve.abs.service.api.dto.payment.PaymentRequest;
 import ru.improve.abs.service.api.dto.payment.PaymentResponse;
@@ -24,11 +26,13 @@ import ru.improve.abs.service.model.Payment;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ru.improve.abs.service.core.repository.request.CriteriaApiRequests.getTotalPaymentsResponseRequest;
 import static ru.improve.abs.service.util.GraphQlUtil.createSpecFromArguments;
 
 @RequiredArgsConstructor
@@ -46,6 +50,8 @@ public class PaymentServiceImp implements PaymentService {
     private final PenaltyService penaltyService;
 
     private final BalanceService balanceService;
+
+    private final EntityManager em;
 
     @Transactional
     @Override
@@ -95,5 +101,11 @@ public class PaymentServiceImp implements PaymentService {
                 .collect(Collectors.groupingBy(
                         PaymentResponse::getCreditId
                 ));
+    }
+
+    @Transactional
+    @Override
+    public GetTotalPaymentsResponse getTotalPaymentsResponse(LocalDate from, LocalDate to) {
+        return em.createQuery(getTotalPaymentsResponseRequest(em, from, to)).getSingleResult();
     }
 }

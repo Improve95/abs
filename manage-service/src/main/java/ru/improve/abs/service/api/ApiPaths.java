@@ -34,6 +34,10 @@ public final class ApiPaths {
 
     public static final String LOANS_AMOUNT = "/loans_amount";
 
+    public static final String PAYMENTS_AMOUNT = "/payments_amount";
+
+    public static final String CREDIT_EXPIRED = "/credit_expired";
+
     public static final String TAKE = "/take";
 
     public static final String REQUEST = "/requests";

@@ -154,9 +154,9 @@ create table payments (
 truncate table credits cascade;
 alter sequence credits_id_seq restart with 1;
 
-insert into credits (id, initial_amount, taking_date, percent, credit_period, month_amount, credit_status, user_id, credit_tariff_id, close_date)
-values (1, 1000, '2023-01-01', 15, 36, 100, 'OPEN', 1, 1, '2025-01-01'),
-       (2, 10000, '2025-01-01', 15, 36, 100, 'CLOSE', 1, 1, '2027-01-01');
+insert into credits (id, initial_amount, taking_date, percent, credit_period, month_amount, credit_status, user_id, credit_tariff_id)
+values (1, 1000, '2023-01-01', 15, 36, 100, 'OPEN', 1, 1),
+       (2, 10000, '2025-01-01', 15, 36, 100, 'CLOSE', 1, 1);
 
 truncate table payments;
 insert into payments (id, credit_id, amount, commission_amount, created_at)
@@ -169,4 +169,7 @@ values (1, 1, 100, 10, '2023-01-02'),
        (7, 2, 110, 10, '2025-02-02'),
        (8, 2, 120, 10, '2025-03-02'),
        (9, 2, 130, 10, '2025-04-02'),
-       (10, 2, 140, 10, '2025-05-02')
+       (10, 2, 140, 10, '2025-05-02');
+
+insert into penalties (credit_id, type, amount, status, created_at)
+values (1, 'PENNY', 100, 'NOT_PAID', '2023-04-02');

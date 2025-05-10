@@ -28,6 +28,8 @@ public interface CreditService {
 
     GetLoansAmountOutputResponse getLoansAmountOutputReport(LocalDate from, LocalDate to);
 
+    double getExpiredCreditPercentRatio(LocalDate from, LocalDate to);
+
     CreditResponse createCredit(PostCreditRequest creditRequest);
 
 //    CreditResponse takeCreatedCredit(long creditId);
