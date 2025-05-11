@@ -10,11 +10,11 @@ spring:
     compose:
       enabled: false
       file: manage-docker-compose.yml
-  cache:
-    cache-names:
-      - security/acl
+#  cache:
+#    cache-names:
+#      - security/acl
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true

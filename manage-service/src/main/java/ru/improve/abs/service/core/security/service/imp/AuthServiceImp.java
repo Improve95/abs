@@ -168,6 +168,6 @@ public class AuthServiceImp implements AuthService {
     @Transactional
     @Override
     public void resetPassword(String token) {
-
+        
     }
 }
