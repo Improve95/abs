@@ -64,6 +64,4 @@ public final class CriteriaApiRequests {
                 cb.count(cb.equal(creditPenaltyJoin.get("status"), NOT_PAID))
         ).where(cb.between(creditRoot.get("takingDate"), closeDateFrom, closeDateTo));
     }
-
-    public static CriteriaQuery<Object> get
 }

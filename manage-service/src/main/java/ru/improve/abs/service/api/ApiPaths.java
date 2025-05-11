@@ -38,6 +38,8 @@ public final class ApiPaths {
 
     public static final String CREDIT_EXPIRED = "/credit_expired";
 
+    public static final String CREDIT_PROFIT = "/credit_profit";
+
     public static final String TAKE = "/take";
 
     public static final String REQUEST = "/requests";

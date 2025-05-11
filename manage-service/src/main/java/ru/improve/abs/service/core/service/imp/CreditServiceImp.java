@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.improve.abs.service.api.dto.credit.CreditRequestResponse;
 import ru.improve.abs.service.api.dto.credit.CreditResponse;
+import ru.improve.abs.service.api.dto.credit.CreditsProfitReportResponse;
 import ru.improve.abs.service.api.dto.credit.GetExpiredCreditsReport;
 import ru.improve.abs.service.api.dto.credit.GetLoansAmountOutputResponse;
 import ru.improve.abs.service.api.dto.credit.PostCreditRequest;
@@ -21,6 +22,7 @@ import ru.improve.abs.service.core.mapper.CreditMapper;
 import ru.improve.abs.service.core.repository.CreditRepository;
 import ru.improve.abs.service.core.repository.CreditRequestRepository;
 import ru.improve.abs.service.core.repository.CreditTariffRepository;
+import ru.improve.abs.service.core.repository.ReportViewRepository;
 import ru.improve.abs.service.core.service.BalanceService;
 import ru.improve.abs.service.core.service.CreditService;
 import ru.improve.abs.service.core.service.UserService;
@@ -51,11 +53,13 @@ public class CreditServiceImp implements CreditService {
 
     private final CreditTariffRepository creditTariffRepository;
 
+    private final ReportViewRepository reportViewRepository;
+
     private final CreditRepository creditRepository;
 
-    private final CreditMapper creditMapper;
-
     private final EntityManager em;
+
+    private final CreditMapper creditMapper;
 
     @Override
     public List<CreditResponse> getCredits(ru.improve.abs.service.api.dto.credit.CreditRequest creditRequest) {
@@ -105,6 +109,14 @@ public class CreditServiceImp implements CreditService {
         long total = getExpiredCreditsReport.getTotalCredit();
         long expired = getExpiredCreditsReport.getExpiredCredit();
         return expired / (total / 100D);
+    }
+
+    @Transactional
+    @Override
+    public List<CreditsProfitReportResponse> getCreditsProfitReport() {
+        return reportViewRepository.findAll().stream()
+                .map(creditMapper::toCreditsProfitReportResponse)
+                .toList();
     }
 
     @Transactional

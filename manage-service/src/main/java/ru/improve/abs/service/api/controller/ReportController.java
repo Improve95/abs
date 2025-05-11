@@ -9,14 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.improve.abs.service.api.controller.spec.ReportControllerSpec;
+import ru.improve.abs.service.api.dto.credit.CreditsProfitReportResponse;
 import ru.improve.abs.service.api.dto.credit.GetLoansAmountOutputResponse;
 import ru.improve.abs.service.api.dto.payment.GetTotalPaymentsResponse;
 import ru.improve.abs.service.core.service.CreditService;
 import ru.improve.abs.service.core.service.PaymentService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static ru.improve.abs.service.api.ApiPaths.CREDIT_EXPIRED;
+import static ru.improve.abs.service.api.ApiPaths.CREDIT_PROFIT;
 import static ru.improve.abs.service.api.ApiPaths.LOANS_AMOUNT;
 import static ru.improve.abs.service.api.ApiPaths.PAYMENTS_AMOUNT;
 import static ru.improve.abs.service.api.ApiPaths.REPORT;
@@ -56,5 +59,11 @@ public class ReportController implements ReportControllerSpec {
     ) {
         double expiredCreditsPercentRatio = creditService.getExpiredCreditPercentRatio(from, to);
         return ResponseEntity.ok(expiredCreditsPercentRatio);
+    }
+
+    @GetMapping(CREDIT_PROFIT)
+    public ResponseEntity<List<CreditsProfitReportResponse>> getCreditsProfitReport() {
+        List<CreditsProfitReportResponse> creditsProfitReport = creditService.getCreditsProfitReport();
+        return ResponseEntity.ok(creditsProfitReport);
     }
 }

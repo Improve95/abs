@@ -1,4 +1,4 @@
-create view accumulative_profit_report as
+create view accumulative_profit_report_view as
 with aggregate_by_day as (
     select sum(p.amount) / c.initial_amount as profit, p.created_at as day
     from credits c inner join payments p on c.id = p.credit_id
@@ -28,12 +28,11 @@ with aggregate_by_day as (
         extract(year from day) as year,
         extract(year from day)::text as date_t
     from aggregate_by_day
-)
-select profit, date_t, day, month, year from accumulate_by_day
-    union all
-select profit, date_t, day, month, year from accumulate_by_month
-    union all
-select profit, date_t, day, month, year from accumulate_by_year
-order by year, month, day;
-
-select * from accumulative_profit_report;
+), order_by_date as (
+    select profit, date_t, day, month, year from accumulate_by_day
+        union all
+    select profit, date_t, day, month, year from accumulate_by_month
+        union all
+    select profit, date_t, day, month, year from accumulate_by_year
+    order by year, month, day
+) select profit, date_t, row_number() over () as id from order_by_date;
