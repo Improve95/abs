@@ -73,7 +73,7 @@ create table employees (
 );
 
 insert into users(email, password, name, employment)
-values ('email1@gmail.com', 'password1', 'name1', 'employment1');
+values ('e.davydov@g.nsu.ru', 'password1', 'name1', 'employment1');
 
 insert into user_role(user_id, role_id) values (1, 1),
                                                (1, 3);

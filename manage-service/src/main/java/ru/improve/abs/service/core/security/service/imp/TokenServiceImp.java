@@ -1,7 +1,6 @@
 package ru.improve.abs.service.core.security.service.imp;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -9,42 +8,29 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
-import ru.improve.abs.service.api.exception.ServiceException;
 import ru.improve.abs.service.core.security.service.TokenService;
-import ru.improve.abs.service.model.Session;
 import ru.improve.abs.service.util.SecurityUtil;
 
-import static ru.improve.abs.service.api.exception.ErrorCode.ILLEGAL_VALUE;
-import static ru.improve.abs.service.util.MessageKeys.SESSION_TOKEN_INVALID;
+import java.util.Map;
+
+import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.JWT_DECODER;
+import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.JWT_ENCODER;
 
 @RequiredArgsConstructor
 @Service
 public class TokenServiceImp implements TokenService {
 
-    private final JwtEncoder jwtEncoder;
+    private final Map<String, JwtDecoder> jwtDecoders;
 
-    private final JwtDecoder jwtDecoder;
+    private final Map<String, JwtEncoder> jwtEncoders;
 
     @Override
-    public Jwt generateToken(UserDetails userDetails, Session session) {
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(session.getIssuedAt())
-                .expiresAt(session.getExpiredAt())
-                .claim(SecurityUtil.SESSION_ID_CLAIM, session.getId())
-                .build();
-        JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
-        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims));
-    }
-
-    /*@Override
     public Jwt generateToken(JwtClaimsSet claims, String encoderType) {
         JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
-//        JwtEncoder jwtEncoder = jwtEncoderMap.get(encoderType + JWT_ENCODER);
+        JwtEncoder jwtEncoder = jwtEncoders.get(encoderType + JWT_ENCODER);
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims));
-    }*/
+    }
 
     @Override
     public long getSessionId(Jwt jwt) {
@@ -52,11 +38,8 @@ public class TokenServiceImp implements TokenService {
     }
 
     @Override
-    public Jwt parseJwt(String jwt) {
-        try {
-            return jwtDecoder.decode(jwt);
-        } catch (JwtException ex) {
-            throw new ServiceException(ILLEGAL_VALUE, SESSION_TOKEN_INVALID, ex.getCause());
-        }
+    public Jwt parseJwt(String jwt, String encoderType) {
+        JwtDecoder jwtDecoder = jwtDecoders.get(encoderType + JWT_DECODER);
+        return jwtDecoder.decode(jwt);
     }
 }

@@ -3,9 +3,7 @@ package ru.improve.abs.service.api.exception;
 import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -13,23 +11,26 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import ru.improve.abs.service.util.MessageUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.improve.abs.service.api.exception.ErrorCode.ACCESS_DENIED;
 import static ru.improve.abs.service.api.exception.ErrorCode.ALREADY_EXIST;
+import static ru.improve.abs.service.api.exception.ErrorCode.EXPIRED;
 import static ru.improve.abs.service.api.exception.ErrorCode.ILLEGAL_DTO_VALUE;
+import static ru.improve.abs.service.api.exception.ErrorCode.ILLEGAL_VALUE;
 import static ru.improve.abs.service.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 import static ru.improve.abs.service.api.exception.ErrorCode.NOT_FOUND;
-import static ru.improve.abs.service.api.exception.ErrorCode.SESSION_IS_OVER;
 import static ru.improve.abs.service.api.exception.ErrorCode.UNAUTHORIZED;
 import static ru.improve.abs.service.util.MessageKeys.TITLE_ACCESS_DENIED;
 import static ru.improve.abs.service.util.MessageKeys.TITLE_ALREADY_EXIST;
+import static ru.improve.abs.service.util.MessageKeys.TITLE_EXPIRED;
 import static ru.improve.abs.service.util.MessageKeys.TITLE_ILLEGAL_DTO_VALUE;
+import static ru.improve.abs.service.util.MessageKeys.TITLE_ILLEGAL_VALUE;
 import static ru.improve.abs.service.util.MessageKeys.TITLE_INTERNAL_SERVER_ERROR;
 import static ru.improve.abs.service.util.MessageKeys.TITLE_NOT_FOUND;
-import static ru.improve.abs.service.util.MessageKeys.TITLE_SESSION_IS_OVER;
 import static ru.improve.abs.service.util.MessageKeys.TITLE_UNAUTHORIZED;
 
 @Slf4j
@@ -40,24 +41,26 @@ public class ExceptionResolver {
     private static ImmutableMap<ErrorCode, String> messageKeyMap = ImmutableMap.of(
             INTERNAL_SERVER_ERROR, TITLE_INTERNAL_SERVER_ERROR,
             ALREADY_EXIST, TITLE_ALREADY_EXIST,
-            ILLEGAL_DTO_VALUE,  TITLE_ILLEGAL_DTO_VALUE,
+            ILLEGAL_DTO_VALUE, TITLE_ILLEGAL_DTO_VALUE,
+            ILLEGAL_VALUE, TITLE_ILLEGAL_VALUE,
             NOT_FOUND, TITLE_NOT_FOUND,
             UNAUTHORIZED, TITLE_UNAUTHORIZED,
-            SESSION_IS_OVER, TITLE_SESSION_IS_OVER,
+            EXPIRED, TITLE_EXPIRED,
             ACCESS_DENIED, TITLE_ACCESS_DENIED
     );
 
     private static ImmutableMap<ErrorCode, HttpStatus> httpStatusMap = ImmutableMap.of(
             INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR,
             ALREADY_EXIST, HttpStatus.BAD_REQUEST,
+            ILLEGAL_VALUE, HttpStatus.BAD_REQUEST,
             ILLEGAL_DTO_VALUE, HttpStatus.BAD_REQUEST,
+            EXPIRED, HttpStatus.BAD_REQUEST,
             NOT_FOUND, HttpStatus.NOT_FOUND,
             UNAUTHORIZED, HttpStatus.UNAUTHORIZED,
-            SESSION_IS_OVER, HttpStatus.UNAUTHORIZED,
             ACCESS_DENIED, HttpStatus.UNAUTHORIZED
     );
 
-    private final MessageSource messageSource;
+    private final MessageUtil messageUtil;
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> resolveHandleException(Exception ex) {
@@ -81,17 +84,17 @@ public class ExceptionResolver {
         }
         return ErrorCodeMessagePair.of(
                 INTERNAL_SERVER_ERROR,
-                resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), null)
+                messageUtil.resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), null)
         );
     }
 
     private ErrorCodeMessagePair resolveServiceException(ServiceException ex) {
         ErrorCode code = ex.getCode();
         StringBuilder message = new StringBuilder();
-        message.append(resolveMessage(messageKeyMap.get(code), ex.getParams()));
+        message.append(messageUtil.resolveMessage(messageKeyMap.get(code), ex.getParams()));
 
         if (ex.getMessage() != null) {
-            message.append(": " + resolveMessage(ex.getMessage(), ex.getParams()));
+            message.append(": " + messageUtil.resolveMessage(ex.getMessage(), ex.getParams()));
         }
 
         if (ex.getCause() != null && ex.getCause().getMessage() != null) {
@@ -106,7 +109,7 @@ public class ExceptionResolver {
                         + parameterMessages.messages.stream().collect(Collectors.joining(", ")))
                 .collect(Collectors.joining("; "));
         return ErrorCodeMessagePair.of(
-                ILLEGAL_DTO_VALUE, resolveMessage(messageKeyMap.get(ILLEGAL_DTO_VALUE), message)
+                ILLEGAL_DTO_VALUE, messageUtil.resolveMessage(messageKeyMap.get(ILLEGAL_DTO_VALUE), message)
         );
     }
 
@@ -132,15 +135,11 @@ public class ExceptionResolver {
     }
 
     private ErrorCodeMessagePair resolveAccessDeniedException(AuthorizationDeniedException ex) {
-        String message = resolveMessage(messageKeyMap.get(UNAUTHORIZED), null) + ": " + ex.getMessage();
+        String message = messageUtil.resolveMessage(messageKeyMap.get(UNAUTHORIZED), null) + ": " + ex.getMessage();
         return ErrorCodeMessagePair.of(
                 UNAUTHORIZED,
                 message
         );
-    }
-
-    private String resolveMessage(String key, String... params) {
-        return messageSource.getMessage(key, params, key, LocaleContextHolder.getLocale());
     }
 
     private record ErrorCodeMessagePair(ErrorCode code, String message) {

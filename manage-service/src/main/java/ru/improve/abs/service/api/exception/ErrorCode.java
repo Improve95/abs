@@ -20,7 +20,7 @@ public enum ErrorCode {
 
     UNAUTHORIZED(6),
 
-    SESSION_IS_OVER(7),
+    EXPIRED(7),
 
     ACCESS_DENIED(8);
 

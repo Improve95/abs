@@ -27,7 +27,10 @@ import ru.improve.abs.service.core.security.service.AuthService;
 
 import static ru.improve.abs.service.api.ApiPaths.AUTH;
 import static ru.improve.abs.service.api.ApiPaths.LOGIN;
+import static ru.improve.abs.service.api.ApiPaths.PASSWORD;
+import static ru.improve.abs.service.api.ApiPaths.RESET;
 import static ru.improve.abs.service.api.ApiPaths.SIGN_IN;
+import static ru.improve.abs.service.api.ApiPaths.TOKEN;
 import static ru.improve.abs.service.util.SecurityUtil.ADMIN_ROLE;
 import static ru.improve.abs.service.util.SecurityUtil.CLIENT_ROLE;
 import static ru.improve.abs.service.util.SecurityUtil.OPERATOR_ROLE;
@@ -84,6 +87,8 @@ public class AuthConfig {
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
 
+                                .requestMatchers(HttpMethod.POST, AUTH + PASSWORD + RESET).permitAll()
+                                .requestMatchers(HttpMethod.POST, AUTH + PASSWORD + RESET + TOKEN).permitAll()
                                 .requestMatchers(HttpMethod.POST, AUTH + SIGN_IN).permitAll()
                                 .requestMatchers(HttpMethod.POST, AUTH + LOGIN).permitAll()
 

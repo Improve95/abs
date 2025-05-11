@@ -61,6 +61,9 @@ public class User implements UserDetails {
     )
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user")
+    private Set<PasswordResetRequest> passwordResetRequests;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
