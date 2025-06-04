@@ -1,3 +1,0 @@
-server:
-  port: ${TOKEN_EXCHANGE_SERVICE_PORT}
-
