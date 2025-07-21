@@ -19,6 +19,8 @@ public interface AuthService {
 
     void logout();
 
+    void logoutAllSessions();
+
     void sendLinkForResetPassword(ResetPasswordGetLinkRequest resetPasswordGetLinkRequest);
 
     void resetPassword(String token, ResetPasswordSendPasswordRequest resetPasswordSendPasswordRequest);

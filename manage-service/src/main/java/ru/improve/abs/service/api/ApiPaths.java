@@ -12,6 +12,8 @@ public final class ApiPaths {
 
     public static final String LOGOUT = "/logout";
 
+    public static final String LOGOUT_ALL = "/logout_all";
+
     public static final String PASSWORD = "/password";
 
     public static final String RESET = "/reset";

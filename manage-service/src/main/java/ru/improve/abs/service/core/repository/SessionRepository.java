@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.improve.abs.service.model.Session;
 import ru.improve.abs.service.model.User;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface SessionRepository extends JpaRepository<Session, Long> {
 
-    Optional<Session> findByUserAndIsEnable(User user, boolean isEnable);
+    List<Session> findAllByUserAndIsEnable(User user, boolean enable);
 }

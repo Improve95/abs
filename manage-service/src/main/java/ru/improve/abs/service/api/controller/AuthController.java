@@ -21,6 +21,7 @@ import ru.improve.abs.service.core.security.service.AuthService;
 import static ru.improve.abs.service.api.ApiPaths.AUTH;
 import static ru.improve.abs.service.api.ApiPaths.LOGIN;
 import static ru.improve.abs.service.api.ApiPaths.LOGOUT;
+import static ru.improve.abs.service.api.ApiPaths.LOGOUT_ALL;
 import static ru.improve.abs.service.api.ApiPaths.PASSWORD;
 import static ru.improve.abs.service.api.ApiPaths.RESET;
 import static ru.improve.abs.service.api.ApiPaths.SIGN_IN;
@@ -48,6 +49,12 @@ public class AuthController implements AuthControllerSpec {
     @PostMapping(LOGOUT)
     public ResponseEntity<Void> logout() {
         authService.logout();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(LOGOUT_ALL)
+    public ResponseEntity<Void> logoutAllSessions() {
+        authService.logoutAllSessions();
         return ResponseEntity.ok().build();
     }
 

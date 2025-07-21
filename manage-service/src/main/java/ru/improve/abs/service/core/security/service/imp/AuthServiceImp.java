@@ -36,7 +36,6 @@ import ru.improve.abs.service.api.exception.ServiceException;
 import ru.improve.abs.service.core.mapper.AuthMapper;
 import ru.improve.abs.service.core.mapper.UserMapper;
 import ru.improve.abs.service.core.repository.PasswordResetRequestRepository;
-import ru.improve.abs.service.core.repository.SessionRepository;
 import ru.improve.abs.service.core.repository.UserRepository;
 import ru.improve.abs.service.core.security.UserDetailService;
 import ru.improve.abs.service.core.security.service.AuthService;
@@ -78,8 +77,6 @@ public class AuthServiceImp implements AuthService {
     private final UserRepository userRepository;
 
     private final SessionService sessionService;
-
-    private final SessionRepository sessionRepository;
 
     private final PasswordResetRequestRepository passwordResetRequestRepository;
 
@@ -186,16 +183,18 @@ public class AuthServiceImp implements AuthService {
         return loginResponse;
     }
 
-    @Transactional
     @Override
     public void logout() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication auth = securityContext.getAuthentication();
         WebAuthenticationDetails details = (WebAuthenticationDetails) auth.getDetails();
         long sessionId = Long.parseLong(details.getSessionId());
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new ServiceException(NOT_FOUND, "session", "id"));
-        session.setEnable(false);
+        sessionService.disableSessionById(sessionId);
+    }
+
+    @Override
+    public void logoutAllSessions() {
+        sessionService.disableAllSessionByUser(userService.getUserFromAuthentication());
     }
 
     @Transactional
@@ -247,6 +246,7 @@ public class AuthServiceImp implements AuthService {
         }
         String email = jwt.getSubject();
         User user = userService.findUserByEmail(email);
+        sessionService.disableAllSessionByUser(user);
         user.setPassword(passwordEncoder.encode(resetPasswordSendPasswordRequest.getPassword()));
     }
 

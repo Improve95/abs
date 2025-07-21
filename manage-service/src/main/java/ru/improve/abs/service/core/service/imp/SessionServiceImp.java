@@ -11,6 +11,7 @@ import ru.improve.abs.service.model.Session;
 import ru.improve.abs.service.model.User;
 
 import java.time.Instant;
+import java.util.List;
 
 import static ru.improve.abs.service.api.exception.ErrorCode.NOT_FOUND;
 
@@ -25,7 +26,7 @@ public class SessionServiceImp implements SessionService {
     @Transactional
     @Override
     public Session create(User user) {
-        setUserSessionDisable(user);
+//        setUserSessionDisable(user);
         Session session = Session.builder()
                 .expiredAt(Instant.now().plus(sessionConfig.getDuration()))
                 .user(user)
@@ -54,8 +55,25 @@ public class SessionServiceImp implements SessionService {
 
     @Transactional
     @Override
-    public void setUserSessionDisable(User user) {
-        sessionRepository.findByUserAndIsEnable(user, true)
-                .ifPresent(session -> session.setEnable(false));
+    public void disableSessionById(long id) {
+        findSessionById(id).setEnable(false);
+    }
+
+    @Transactional
+    @Override
+    public void disableAllSessionByUser(User user) {
+        List<Session> sessions = sessionRepository.findAllByUserAndIsEnable(user, true);
+        sessions.forEach(this::disableSession);
+    }
+
+    @Transactional
+    @Override
+    public Session findSessionById(long id) {
+        return sessionRepository.findById(id)
+                .orElseThrow(() -> new ServiceException(NOT_FOUND, "session", "id"));
+    }
+
+    private void disableSession(Session session) {
+        session.setEnable(false);
     }
 }

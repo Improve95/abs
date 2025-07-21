@@ -18,4 +18,7 @@ public interface AuthControllerSpec {
 
     @SecurityRequirement(name = SWAGGER_SECURITY_SCHEME_NAME)
     ResponseEntity<Void> logout();
+
+    @SecurityRequirement(name = SWAGGER_SECURITY_SCHEME_NAME)
+    ResponseEntity<Void> logoutAllSessions();
 }
