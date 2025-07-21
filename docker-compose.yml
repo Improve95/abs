@@ -67,21 +67,22 @@ services:
     networks:
       - abs_service_network
 
-#  auth-service:
-#    build:
-#      dockerfile: auth-service.dockerfile
-#    container_name: "auth-service"
-#    env_file:
-#      - .env
-#    environment:
-#      DOCKER_AUTH_POSTGRES_URL: jdbc:postgresql://auth_db_postgres:5432/${AUTH_PG_DATABASE}
-#    ports:
-#      - "${AUTH_SERVICE_PORT}:8080"
-#    depends_on:
-#      - auth_db_postgres
-#    networks:
-#      - abs_service_network
-#
+  abs-service:
+    build:
+      dockerfile: Dockerfile
+    container_name: "abs-service"
+    env_file:
+      - .env
+    environment:
+      CREDIT_PG_HOST: credit_db_postgres
+      CREDIT_PG_PORT: 5432
+    ports:
+      - "${MANAGE_SERVICE_PORT}:8080"
+    depends_on:
+      - credit_db_postgres
+    networks:
+      - abs_service_network
+
 #  traefik:
 #    image: traefik:v3.3
 #    container_name: "traefik"
@@ -98,4 +99,5 @@ services:
 
 networks:
   abs_service_network:
-    external: true
+    name: "abs-network"
+    driver: bridge

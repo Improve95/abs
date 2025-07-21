@@ -11,6 +11,7 @@ import java.util.Collection;
 
 import static ru.improve.abs.service.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 
+@SuppressWarnings("unchecked")
 public final class GraphQlUtil {
 
     public static final String PAGE_ARGUMENT = "page";

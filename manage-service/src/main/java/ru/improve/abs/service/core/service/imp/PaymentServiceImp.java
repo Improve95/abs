@@ -90,7 +90,9 @@ public class PaymentServiceImp implements PaymentService {
             Set<Long> creditIds,
             BatchLoaderEnvironment batchLoaderEnvironment
     ) {
-        PaymentRequest paymentRequest = (PaymentRequest) batchLoaderEnvironment.getKeyContextsList().getFirst();
+        int keyListSize = batchLoaderEnvironment.getKeyContextsList().size();
+        PaymentRequest paymentRequest = (PaymentRequest) batchLoaderEnvironment.getKeyContextsList()
+                .get(keyListSize - 1);
         PaymentFilter paymentFilter = paymentRequest.getPaymentFilter();
         if (paymentFilter == null) {
             paymentFilter = new PaymentFilter();

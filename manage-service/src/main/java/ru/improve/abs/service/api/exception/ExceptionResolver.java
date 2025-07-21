@@ -38,7 +38,7 @@ import static ru.improve.abs.service.util.MessageKeys.TITLE_UNAUTHORIZED;
 @RestControllerAdvice
 public class ExceptionResolver {
 
-    private static ImmutableMap<ErrorCode, String> messageKeyMap = ImmutableMap.of(
+    private static final ImmutableMap<ErrorCode, String> messageKeyMap = ImmutableMap.of(
             INTERNAL_SERVER_ERROR, TITLE_INTERNAL_SERVER_ERROR,
             ALREADY_EXIST, TITLE_ALREADY_EXIST,
             ILLEGAL_DTO_VALUE, TITLE_ILLEGAL_DTO_VALUE,
@@ -49,7 +49,7 @@ public class ExceptionResolver {
             ACCESS_DENIED, TITLE_ACCESS_DENIED
     );
 
-    private static ImmutableMap<ErrorCode, HttpStatus> httpStatusMap = ImmutableMap.of(
+    private static final ImmutableMap<ErrorCode, HttpStatus> httpStatusMap = ImmutableMap.of(
             INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR,
             ALREADY_EXIST, HttpStatus.BAD_REQUEST,
             ILLEGAL_VALUE, HttpStatus.BAD_REQUEST,
@@ -84,7 +84,7 @@ public class ExceptionResolver {
         }
         return ErrorCodeMessagePair.of(
                 INTERNAL_SERVER_ERROR,
-                messageUtil.resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), null)
+                messageUtil.resolveMessage(messageKeyMap.get(INTERNAL_SERVER_ERROR), (String) null)
         );
     }
 
@@ -135,7 +135,7 @@ public class ExceptionResolver {
     }
 
     private ErrorCodeMessagePair resolveAccessDeniedException(AuthorizationDeniedException ex) {
-        String message = messageUtil.resolveMessage(messageKeyMap.get(UNAUTHORIZED), null) + ": " + ex.getMessage();
+        String message = messageUtil.resolveMessage(messageKeyMap.get(UNAUTHORIZED), (String) null) + ": " + ex.getMessage();
         return ErrorCodeMessagePair.of(
                 UNAUTHORIZED,
                 message
