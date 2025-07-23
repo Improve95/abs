@@ -1,4 +1,4 @@
-package ru.improve.abs.service.api.dto.user;
+package ru.improve.abs.service.api.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -18,7 +18,7 @@ public class SignInRequest {
     private String name;
 
     @Schema(
-            example = "email1@gmail.com"
+            example = "gmail1@gmail.com"
     )
     @NotNull
     @NotBlank

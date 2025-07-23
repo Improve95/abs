@@ -26,7 +26,6 @@ public class SessionServiceImp implements SessionService {
     @Transactional
     @Override
     public Session create(User user) {
-//        setUserSessionDisable(user);
         Session session = Session.builder()
                 .expiredAt(Instant.now().plus(sessionConfig.getDuration()))
                 .user(user)

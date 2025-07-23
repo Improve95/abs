@@ -14,8 +14,8 @@ import ru.improve.abs.service.api.dto.auth.LoginRequest;
 import ru.improve.abs.service.api.dto.auth.LoginResponse;
 import ru.improve.abs.service.api.dto.auth.ResetPasswordGetLinkRequest;
 import ru.improve.abs.service.api.dto.auth.ResetPasswordSendPasswordRequest;
-import ru.improve.abs.service.api.dto.user.SignInRequest;
-import ru.improve.abs.service.api.dto.user.SignInResponse;
+import ru.improve.abs.service.api.dto.auth.SignInRequest;
+import ru.improve.abs.service.api.dto.auth.SignInResponse;
 import ru.improve.abs.service.core.security.service.AuthService;
 
 import static ru.improve.abs.service.api.ApiPaths.AUTH;

@@ -1,38 +1,4 @@
 services:
-#  auth_db_postgres:
-#    container_name: "auth-postgres"
-#    env_file:
-#      - .env
-#    image: 'postgres:16.4'
-#    environment:
-#      POSTGRES_USER: ${AUTH_PG_USER}
-#      POSTGRES_PASSWORD: ${AUTH_PG_PASSWORD}
-#      POSTGRES_DB: ${AUTH_PG_DATABASE}
-#    ports:
-#      - "${AUTH_PG_PORT}:5432"
-#    networks:
-#      - abs_service_network
-#
-#  auth_flyway:
-#    container_name: "auth-flyway"
-#    env_file:
-#      - .env
-#    environment:
-#      FLYWAY_URL: jdbc:postgresql://auth_db_postgres:5432/${AUTH_PG_DATABASE}
-#      FLYWAY_USER: ${AUTH_PG_USER}
-#      FLYWAY_PASSWORD: ${AUTH_PG_PASSWORD}
-#    command:
-#      - migrate
-#    volumes:
-#      - ./auth-service/src/main/resources/flyway/migrations:/flyway/sql
-#    image: 'flyway/flyway:11.4'
-#    depends_on:
-#      auth_db_postgres:
-#        condition: service_started
-#        restart: true
-#    networks:
-#      - abs_service_network
-
   credit_db_postgres:
     container_name: "credit-postgres"
     env_file:
@@ -82,20 +48,6 @@ services:
       - credit_db_postgres
     networks:
       - abs_service_network
-
-#  traefik:
-#    image: traefik:v3.3
-#    container_name: "traefik"
-#    env_file:
-#      - .env
-#    ports:
-#      - "${TRAEFIK_PORT}:80"
-#    volumes:
-#      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-#      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
-#      - /var/run/docker.sock:/var/run/docker.sock:ro
-#    networks:
-#      - abs_service_network
 
 networks:
   abs_service_network:

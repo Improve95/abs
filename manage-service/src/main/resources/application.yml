@@ -6,10 +6,6 @@ spring:
     name: abs-service
   config:
     import: optional:file:.env[.properties], keys/jwt-secrets.yml, keys/mail-keys.yml
-  docker:
-    compose:
-      enabled: false
-      file: manage-docker-compose.yml
 
   datasource:
     url: jdbc:postgresql://${CREDIT_PG_HOST}:${CREDIT_PG_PORT}/${CREDIT_PG_DATABASE}
@@ -42,7 +38,6 @@ spring:
             required: true
     verify:
       host: ${VERIFY_EMAIL_HOST}
-
 
 credit:
   payment-duration: 30d

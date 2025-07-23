@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class ResetPasswordGetLinkRequest {
 
-    @Schema(defaultValue = "e.davydov@g.nsu.ru")
+    @Schema(defaultValue = "gmail1@gmail.com")
     private String email;
 }

@@ -11,6 +11,7 @@ public interface SessionService {
     boolean checkSessionEnableById(long id);
 
     boolean checkSessionEnable(Session session);
+
     void disableSessionById(long id);
 
     void disableAllSessionByUser(User user);

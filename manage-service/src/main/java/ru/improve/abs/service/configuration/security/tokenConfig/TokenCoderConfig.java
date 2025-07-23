@@ -17,7 +17,7 @@ import javax.crypto.SecretKey;
 @Configuration
 public class TokenCoderConfig {
 
-     public static final String CLIENT_JWT_CODER = "client_coder";
+     public static final String ACCESS_TOKEN_CODER = "access_token_coder";
 
      public static final String PASSWORD_JWT_CODER = "password_coder";
 
@@ -28,13 +28,13 @@ public class TokenCoderConfig {
      private final TokenConfig tokenConfig;
 
      @Primary
-     @Bean(name = CLIENT_JWT_CODER + JWT_DECODER)
+     @Bean(name = ACCESS_TOKEN_CODER + JWT_DECODER)
      public JwtDecoder clientJwtDecoder() {
           return NimbusJwtDecoder.withSecretKey(secretKey(tokenConfig.getSecret())).build();
      }
 
      @Primary
-     @Bean(name = CLIENT_JWT_CODER + JWT_ENCODER)
+     @Bean(name = ACCESS_TOKEN_CODER + JWT_ENCODER)
      public JwtEncoder clientJwtEncoder() {
           return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey(tokenConfig.getSecret())));
      }

@@ -19,10 +19,18 @@ mail:
 4) все эндпоинты доступны по адресу: http://localhost:8074/swagger-ui/index.html
 
 5) админом можно стать через изменения бд, админ имеет только ему доступные методы в контроллере
-6) до дефолту есть пользователь e.davydov@g.nsu.ru c паролем password1
 
 7) есть восстановление пароля через почту, (подтверждения почты нет ¯\\__(ツ)_/¯)
 
+8)  проверяющим t1 будут интересны:
+````
+ru.improve.abs.service.api.controller.AdminController
+ru.improve.abs.service.api.controller.AuthController
+и все пакеты:
+ru.improve.abs.service.configuration.security
+ru.improve.abs.service.core.security
+````
+ну и можете посмотреть чего я тут вообще наделал, если понравтся авторизация :DDD
 
 #### graphQL
 

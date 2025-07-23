@@ -44,7 +44,6 @@ public class AuthConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-//        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
@@ -66,13 +65,6 @@ public class AuthConfig {
                 ADMIN_ROLE + " > " + OPERATOR_ROLE + " > " + CLIENT_ROLE
         );
     }
-
-    /*@Bean
-    public MethodSecurityExpressionHandler methodSecurityExpressionHandler(RoleHierarchy roleHierarchy) {
-        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        expressionHandler.setRoleHierarchy(roleHierarchy);
-        return expressionHandler;
-    }*/
 
     @Bean
     public SecurityFilterChain securityFilterChain(

@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-import ru.improve.abs.service.api.dto.user.SignInRequest;
-import ru.improve.abs.service.api.dto.user.SignInResponse;
+import ru.improve.abs.service.api.dto.auth.SignInRequest;
+import ru.improve.abs.service.api.dto.auth.SignInResponse;
 import ru.improve.abs.service.api.dto.user.UserResponse;
 import ru.improve.abs.service.model.User;
 

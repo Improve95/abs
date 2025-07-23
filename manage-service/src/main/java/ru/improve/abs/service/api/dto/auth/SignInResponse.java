@@ -1,4 +1,4 @@
-package ru.improve.abs.service.api.dto.user;
+package ru.improve.abs.service.api.dto.auth;
 
 import lombok.Builder;
 import lombok.Data;
@@ -10,4 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 public class SignInResponse {
 
     private int id;
+
+    private String accessToken;
 }

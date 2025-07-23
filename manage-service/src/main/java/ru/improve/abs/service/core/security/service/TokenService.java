@@ -5,8 +5,6 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 
 public interface TokenService {
 
-//    Jwt generateToken(UserDetails userDetails, Session session);
-
     Jwt generateToken(JwtClaimsSet claims, String encoderType);
 
     long getSessionId(Jwt jwt);

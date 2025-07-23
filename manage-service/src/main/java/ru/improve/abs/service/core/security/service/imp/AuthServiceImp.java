@@ -30,8 +30,8 @@ import ru.improve.abs.service.api.dto.auth.LoginRequest;
 import ru.improve.abs.service.api.dto.auth.LoginResponse;
 import ru.improve.abs.service.api.dto.auth.ResetPasswordGetLinkRequest;
 import ru.improve.abs.service.api.dto.auth.ResetPasswordSendPasswordRequest;
-import ru.improve.abs.service.api.dto.user.SignInRequest;
-import ru.improve.abs.service.api.dto.user.SignInResponse;
+import ru.improve.abs.service.api.dto.auth.SignInRequest;
+import ru.improve.abs.service.api.dto.auth.SignInResponse;
 import ru.improve.abs.service.api.exception.ServiceException;
 import ru.improve.abs.service.core.mapper.AuthMapper;
 import ru.improve.abs.service.core.mapper.UserMapper;
@@ -58,7 +58,7 @@ import static ru.improve.abs.service.api.exception.ErrorCode.ILLEGAL_VALUE;
 import static ru.improve.abs.service.api.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 import static ru.improve.abs.service.api.exception.ErrorCode.NOT_FOUND;
 import static ru.improve.abs.service.api.exception.ErrorCode.UNAUTHORIZED;
-import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.CLIENT_JWT_CODER;
+import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.ACCESS_TOKEN_CODER;
 import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.PASSWORD_JWT_CODER;
 import static ru.improve.abs.service.util.MessageKeys.RESET_PASSWORD_MAIL_MESSAGE_TEXT;
 import static ru.improve.abs.service.util.MessageKeys.RESET_PASSWORD_MAIL_SUBJECT;
@@ -145,7 +145,14 @@ public class AuthServiceImp implements AuthService {
             throw new ServiceException(INTERNAL_SERVER_ERROR, ex);
         }
 
-        return userMapper.toSignInUserResponse(user);
+        SignInResponse signInResponse = userMapper.toSignInUserResponse(user);
+        LoginResponse loginResponse = login(
+                LoginRequest.builder()
+                        .login(signInRequest.getEmail())
+                        .password(signInRequest.getPassword())
+                        .build());
+        signInResponse.setAccessToken(loginResponse.getAccessToken());
+        return signInResponse;
     }
 
     @Override
@@ -175,7 +182,7 @@ public class AuthServiceImp implements AuthService {
                 .expiresAt(session.getExpiredAt())
                 .claim(SecurityUtil.SESSION_ID_CLAIM, session.getId())
                 .build();
-        Jwt accessTokenJwt = tokenService.generateToken(claims, CLIENT_JWT_CODER);
+        Jwt accessTokenJwt = tokenService.generateToken(claims, ACCESS_TOKEN_CODER);
 
         LoginResponse loginResponse = authMapper.toLoginResponse(session);
         loginResponse.setAccessToken(accessTokenJwt.getTokenValue());
