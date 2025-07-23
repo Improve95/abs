@@ -1,4 +1,4 @@
-package ru.improve.abs.service.api.dto.auth;
+package ru.improve.abs.service.api.dto.auth.resetPassword;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

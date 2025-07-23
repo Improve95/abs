@@ -26,13 +26,15 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
-import ru.improve.abs.service.api.dto.auth.LoginRequest;
-import ru.improve.abs.service.api.dto.auth.LoginResponse;
-import ru.improve.abs.service.api.dto.auth.ResetPasswordGetLinkRequest;
-import ru.improve.abs.service.api.dto.auth.ResetPasswordSendPasswordRequest;
-import ru.improve.abs.service.api.dto.auth.SignInRequest;
-import ru.improve.abs.service.api.dto.auth.SignInResponse;
+import ru.improve.abs.service.api.dto.auth.login.LoginRequest;
+import ru.improve.abs.service.api.dto.auth.login.LoginResponse;
+import ru.improve.abs.service.api.dto.auth.refresh.RefreshAccessTokenResponse;
+import ru.improve.abs.service.api.dto.auth.resetPassword.ResetPasswordGetLinkRequest;
+import ru.improve.abs.service.api.dto.auth.resetPassword.ResetPasswordSendPasswordRequest;
+import ru.improve.abs.service.api.dto.auth.signin.SignInRequest;
+import ru.improve.abs.service.api.dto.auth.signin.SignInResponse;
 import ru.improve.abs.service.api.exception.ServiceException;
+import ru.improve.abs.service.configuration.security.SessionConfig;
 import ru.improve.abs.service.core.mapper.AuthMapper;
 import ru.improve.abs.service.core.mapper.UserMapper;
 import ru.improve.abs.service.core.repository.PasswordResetRequestRepository;
@@ -59,7 +61,8 @@ import static ru.improve.abs.service.api.exception.ErrorCode.INTERNAL_SERVER_ERR
 import static ru.improve.abs.service.api.exception.ErrorCode.NOT_FOUND;
 import static ru.improve.abs.service.api.exception.ErrorCode.UNAUTHORIZED;
 import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.ACCESS_TOKEN_CODER;
-import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.PASSWORD_JWT_CODER;
+import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.REFRESH_TOKEN_CODER;
+import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.RESET_PASSWORD_TOKEN_CODER;
 import static ru.improve.abs.service.util.MessageKeys.RESET_PASSWORD_MAIL_MESSAGE_TEXT;
 import static ru.improve.abs.service.util.MessageKeys.RESET_PASSWORD_MAIL_SUBJECT;
 
@@ -94,6 +97,8 @@ public class AuthServiceImp implements AuthService {
 
     private final MessageUtil messageUtil;
 
+    private final SessionConfig sessionConfig;
+
     @Override
     public boolean setAuthentication(HttpServletRequest request, HttpServletResponse response) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -107,8 +112,12 @@ public class AuthServiceImp implements AuthService {
             Jwt jwtToken = (Jwt) auth.getPrincipal();
 
             long sessionId = tokenService.getSessionId(jwtToken);
-            if (!sessionService.checkSessionEnableById(sessionId)) {
-                throw new ServiceException(EXPIRED, "session");
+            Session session = sessionService.findSessionById(sessionId);
+            if (!session.isEnable()) {
+                throw new ServiceException(EXPIRED, "session is disabled");
+            }
+            if (tokenService.checkTokenExpired(jwtToken)) {
+                throw new ServiceException(EXPIRED, "access token");
             }
 
             UserDetails userDetails = userDetailService.loadUserByUsername(jwtToken.getSubject());
@@ -122,11 +131,7 @@ public class AuthServiceImp implements AuthService {
             securityContext.setAuthentication(null);
             SecurityContextHolder.clearContext();
             response.reset();
-
-            ServiceException exception = (ex.getCode() == EXPIRED ?
-                    new ServiceException(EXPIRED, "session") :
-                    new ServiceException(UNAUTHORIZED));
-            throw exception;
+            throw ex.getCode() == EXPIRED ? ex : new ServiceException(UNAUTHORIZED);
         }
     }
 
@@ -152,6 +157,7 @@ public class AuthServiceImp implements AuthService {
                         .password(signInRequest.getPassword())
                         .build());
         signInResponse.setAccessToken(loginResponse.getAccessToken());
+        signInResponse.setRefreshToken(loginResponse.getRefreshToken());
         return signInResponse;
     }
 
@@ -174,20 +180,66 @@ public class AuthServiceImp implements AuthService {
             throw new ServiceException(UNAUTHORIZED);
         }
 
-        Session session = sessionService.create(user);
+        Instant issuedAt = Instant.now();
+        Session session = sessionService.create(user, issuedAt, issuedAt.plus(sessionConfig.getRefreshDuration()));
 
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(user.getUsername())
-                .issuedAt(session.getIssuedAt())
-                .expiresAt(session.getExpiredAt())
-                .claim(SecurityUtil.SESSION_ID_CLAIM, session.getId())
-                .build();
+        JwtClaimsSet claims = SecurityUtil.createDefaultClaims(
+                user.getUsername(),
+                issuedAt,
+                issuedAt.plus(sessionConfig.getAccessDuration()),
+                session.getId()
+        );
         Jwt accessTokenJwt = tokenService.generateToken(claims, ACCESS_TOKEN_CODER);
+
+        claims = SecurityUtil.createDefaultClaims(
+                user.getUsername(),
+                issuedAt,
+                issuedAt.plus(sessionConfig.getRefreshDuration()),
+                session.getId()
+        );
+        Jwt refreshTokenJwt = tokenService.generateToken(claims, REFRESH_TOKEN_CODER);
 
         LoginResponse loginResponse = authMapper.toLoginResponse(session);
         loginResponse.setAccessToken(accessTokenJwt.getTokenValue());
+        loginResponse.setRefreshToken(refreshTokenJwt.getTokenValue());
 
         return loginResponse;
+    }
+
+    /*
+    eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnbWFpbDFAZ21haWwuY29tIiwic2Vzc2lvbklkIjoxMiwiZXhwIjoxNzU1ODYwMDgxLCJpYXQiOjE3NTMyNjgwODF9.yg096-4wg-xrBdJmcxUX2c7ckPNXMiqy0va9Y5NXll8
+    * */
+    @Override
+    public RefreshAccessTokenResponse refreshAccessToken(String refreshToken) {
+        try {
+            Jwt jwtToken = tokenService.parseJwt(refreshToken, REFRESH_TOKEN_CODER);
+            if (tokenService.checkTokenExpired(jwtToken)) {
+                throw new ServiceException(EXPIRED, "refresh token");
+            }
+
+            long sessionId = tokenService.getSessionId(jwtToken);
+            Session session = sessionService.findSessionById(sessionId);
+            if (!session.isEnable()) {
+                throw new ServiceException(EXPIRED, "session is disabled");
+            }
+
+            User user = userService.findUserByEmail(jwtToken.getSubject());
+
+            Instant issuedAt = Instant.now();
+            JwtClaimsSet claims = SecurityUtil.createDefaultClaims(
+                    user.getUsername(),
+                    issuedAt,
+                    issuedAt.plus(sessionConfig.getAccessDuration()),
+                    sessionId
+            );
+
+            Jwt accessToken = tokenService.generateToken(claims, ACCESS_TOKEN_CODER);
+            return RefreshAccessTokenResponse.builder()
+                    .accessToken(accessToken.getTokenValue())
+                    .build();
+        } catch (ServiceException ex) {
+            throw ex.getCode() == EXPIRED ? ex : new ServiceException(UNAUTHORIZED);
+        }
     }
 
     @Override
@@ -213,7 +265,7 @@ public class AuthServiceImp implements AuthService {
                 .subject(user.getUsername())
                 .expiresAt(Instant.now().plus(Duration.ofMinutes(20)))
                 .build();
-        Jwt passwordResetToken = tokenService.generateToken(claims, PASSWORD_JWT_CODER);
+        Jwt passwordResetToken = tokenService.generateToken(claims, RESET_PASSWORD_TOKEN_CODER);
 
         disableAllResetPasswordRequest(user);
 
@@ -244,7 +296,7 @@ public class AuthServiceImp implements AuthService {
 
         Jwt jwt;
         try {
-            jwt = tokenService.parseJwt(token, PASSWORD_JWT_CODER);
+            jwt = tokenService.parseJwt(token, RESET_PASSWORD_TOKEN_CODER);
         } catch (JwtException ex) {
             throw new ServiceException(ILLEGAL_VALUE, ex.getCause());
         }

@@ -20,6 +20,8 @@ public final class ApiPaths {
 
     public static final String TOKEN = "/{token}";
 
+    public static final String REFRESH = "/refresh";
+
     public static final String ROLES = "/roles";
 
     public static final String BECOME = "/become";

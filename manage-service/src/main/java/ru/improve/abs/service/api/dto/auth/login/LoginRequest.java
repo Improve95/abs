@@ -1,4 +1,4 @@
-package ru.improve.abs.service.api.dto.auth;
+package ru.improve.abs.service.api.dto.auth.login;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

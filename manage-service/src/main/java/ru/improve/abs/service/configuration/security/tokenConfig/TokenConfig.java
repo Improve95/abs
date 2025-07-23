@@ -7,7 +7,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app.token", ignoreUnknownFields = false)
 public class TokenConfig {
 
-    private String secret;
+    String accessSecret;
 
-    private String resetPasswordSecret;
+    String refreshSecret;
+
+    String resetPasswordSecret;
 }

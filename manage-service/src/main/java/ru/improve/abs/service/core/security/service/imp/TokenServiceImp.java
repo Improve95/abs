@@ -8,12 +8,16 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
+import ru.improve.abs.service.api.exception.ServiceException;
 import ru.improve.abs.service.core.security.service.TokenService;
 import ru.improve.abs.service.util.SecurityUtil;
 
+import java.time.Instant;
 import java.util.Map;
 
+import static ru.improve.abs.service.api.exception.ErrorCode.UNAUTHORIZED;
 import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.JWT_DECODER;
 import static ru.improve.abs.service.configuration.security.tokenConfig.TokenCoderConfig.JWT_ENCODER;
 
@@ -38,8 +42,17 @@ public class TokenServiceImp implements TokenService {
     }
 
     @Override
+    public boolean checkTokenExpired(Jwt jwt) {
+        return jwt.getExpiresAt().isBefore(Instant.now());
+    }
+
+    @Override
     public Jwt parseJwt(String jwt, String encoderType) {
         JwtDecoder jwtDecoder = jwtDecoders.get(encoderType + JWT_DECODER);
-        return jwtDecoder.decode(jwt);
+        try {
+            return jwtDecoder.decode(jwt);
+        } catch (JwtException jwtException) {
+            throw new ServiceException(UNAUTHORIZED);
+        }
     }
 }

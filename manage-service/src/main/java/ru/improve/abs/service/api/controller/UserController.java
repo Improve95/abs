@@ -23,7 +23,7 @@ public class UserController implements UserControllerSpec {
 
     @GetMapping()
     public ResponseEntity<UserResponse> getUserByAuth() {
-        UserResponse userResponse = userService.getUserByAuth();
+        UserResponse userResponse = userService.getRefreshUserByAuth();
         return ResponseEntity.ok(userResponse);
     }
 

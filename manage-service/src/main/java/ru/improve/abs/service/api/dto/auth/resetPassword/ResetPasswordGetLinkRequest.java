@@ -1,4 +1,4 @@
-package ru.improve.abs.service.api.dto.auth;
+package ru.improve.abs.service.api.dto.auth.resetPassword;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -9,5 +9,7 @@ public interface TokenService {
 
     long getSessionId(Jwt jwt);
 
+    boolean checkTokenExpired(Jwt jwt);
+
     Jwt parseJwt(String jwt, String encoderType);
 }

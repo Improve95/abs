@@ -19,7 +19,9 @@ public class TokenCoderConfig {
 
      public static final String ACCESS_TOKEN_CODER = "access_token_coder";
 
-     public static final String PASSWORD_JWT_CODER = "password_coder";
+     public static final String REFRESH_TOKEN_CODER = "refresh_token_coder";
+
+     public static final String RESET_PASSWORD_TOKEN_CODER = "reset_password_token_coder";
 
      public static final String JWT_ENCODER = "_jwt_encoder";
 
@@ -30,23 +32,33 @@ public class TokenCoderConfig {
      @Primary
      @Bean(name = ACCESS_TOKEN_CODER + JWT_DECODER)
      public JwtDecoder clientJwtDecoder() {
-          return NimbusJwtDecoder.withSecretKey(secretKey(tokenConfig.getSecret())).build();
+          return NimbusJwtDecoder.withSecretKey(secretKey(tokenConfig.getAccessSecret())).build();
      }
 
      @Primary
      @Bean(name = ACCESS_TOKEN_CODER + JWT_ENCODER)
      public JwtEncoder clientJwtEncoder() {
-          return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey(tokenConfig.getSecret())));
+          return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey(tokenConfig.getAccessSecret())));
      }
 
-     @Bean(name = PASSWORD_JWT_CODER + JWT_DECODER)
+     @Bean(name = REFRESH_TOKEN_CODER + JWT_DECODER)
+     public JwtDecoder refreshJwtDecoder() {
+          return NimbusJwtDecoder.withSecretKey(secretKey(tokenConfig.getRefreshSecret())).build();
+     }
+
+     @Bean(name = REFRESH_TOKEN_CODER + JWT_ENCODER)
+     public JwtEncoder refreshJwtEncoder() {
+          return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey(tokenConfig.getRefreshSecret())));
+     }
+
+     @Bean(name = RESET_PASSWORD_TOKEN_CODER + JWT_DECODER)
      public JwtDecoder passwordResetJwtDecoder() {
-          return NimbusJwtDecoder.withSecretKey(secretKey(tokenConfig.getSecret())).build();
+          return NimbusJwtDecoder.withSecretKey(secretKey(tokenConfig.getResetPasswordSecret())).build();
      }
 
-     @Bean(name = PASSWORD_JWT_CODER + JWT_ENCODER)
+     @Bean(name = RESET_PASSWORD_TOKEN_CODER + JWT_ENCODER)
      public JwtEncoder passwordResetJwtEncoder() {
-          return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey(tokenConfig.getSecret())));
+          return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey(tokenConfig.getResetPasswordSecret())));
      }
 
      private SecretKey secretKey(String secretKey) {

@@ -1,5 +1,6 @@
 package ru.improve.abs.service.core.service.imp;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,8 @@ public class UserServiceImp implements UserService {
 
     private final UserMapper userMapper;
 
+    private final EntityManager em;
+
     @Transactional
     @Override
     public UserResponse getUserById(int id) {
@@ -35,8 +38,9 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public UserResponse getUserByAuth() {
+    public UserResponse getRefreshUserByAuth() {
         User user = getUserFromAuthentication();
+        em.merge(user);
         return userMapper.toUserResponse(user);
     }
 
@@ -45,11 +49,8 @@ public class UserServiceImp implements UserService {
     public UserResponse becomeUserClient() {
         User user = getUserFromAuthentication();
         Role clientRole = roleService.findRoleByName(SecurityUtil.CLIENT_ROLE);
-        if (user.getRoles().contains(clientRole)) {
-            return userMapper.toUserResponse(user);
-        }
         user.getRoles().add(clientRole);
-
+        userRepository.save(user);
         return userMapper.toUserResponse(user);
     }
 
@@ -70,13 +71,13 @@ public class UserServiceImp implements UserService {
         return userMapper.toUserResponse(user);
     }
 
-    @Transactional
+    /**
+     * BE CAREFULLY - THIS METHOD RETURNING DETACH USER
+     * <p>YOU SHOULD UPDATE USER IF YOU NEED ACTUAL DATA</p>
+     **/
     @Override
     public User getUserFromAuthentication() {
-        User detachUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return detachUser;
-//        int userId = detachUser.getId();
-//        return findUserById(userId);
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     @Transactional

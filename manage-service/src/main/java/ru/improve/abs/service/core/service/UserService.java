@@ -14,7 +14,7 @@ public interface UserService {
 
     UserResponse getUserById(int id);
 
-    UserResponse getUserByAuth();
+    UserResponse getRefreshUserByAuth();
 
     User getUserFromAuthentication();
 

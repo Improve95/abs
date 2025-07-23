@@ -28,6 +28,7 @@ import ru.improve.abs.service.core.security.service.AuthService;
 import static ru.improve.abs.service.api.ApiPaths.AUTH;
 import static ru.improve.abs.service.api.ApiPaths.LOGIN;
 import static ru.improve.abs.service.api.ApiPaths.PASSWORD;
+import static ru.improve.abs.service.api.ApiPaths.REFRESH;
 import static ru.improve.abs.service.api.ApiPaths.RESET;
 import static ru.improve.abs.service.api.ApiPaths.SIGN_IN;
 import static ru.improve.abs.service.api.ApiPaths.TOKEN;
@@ -81,6 +82,7 @@ public class AuthConfig {
 
                                 .requestMatchers(HttpMethod.POST, AUTH + PASSWORD + RESET).permitAll()
                                 .requestMatchers(HttpMethod.POST, AUTH + PASSWORD + RESET + TOKEN).permitAll()
+                                .requestMatchers(HttpMethod.POST, AUTH + REFRESH + TOKEN).permitAll()
                                 .requestMatchers(HttpMethod.POST, AUTH + SIGN_IN).permitAll()
                                 .requestMatchers(HttpMethod.POST, AUTH + LOGIN).permitAll()
 

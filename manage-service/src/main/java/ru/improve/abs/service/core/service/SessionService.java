@@ -4,13 +4,11 @@ package ru.improve.abs.service.core.service;
 import ru.improve.abs.service.model.Session;
 import ru.improve.abs.service.model.User;
 
+import java.time.Instant;
+
 public interface SessionService {
 
-    Session create(User user);
-
-    boolean checkSessionEnableById(long id);
-
-    boolean checkSessionEnable(Session session);
+    Session create(User user, Instant issuedAt, Instant expiredAt);
 
     void disableSessionById(long id);
 

@@ -9,5 +9,7 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "app.session", ignoreUnknownFields = false)
 public class SessionConfig {
 
-    private Duration duration;
+    Duration accessDuration;
+
+    Duration refreshDuration;
 }

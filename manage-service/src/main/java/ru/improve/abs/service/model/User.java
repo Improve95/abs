@@ -1,6 +1,5 @@
 package ru.improve.abs.service.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -44,10 +43,7 @@ public class User implements UserDetails {
 
     private String employment;
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "user")
     private List<CreditRequest> creditRequests;
 
     @OneToMany(mappedBy = "user")
